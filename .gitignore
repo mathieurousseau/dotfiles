@@ -1,9 +1,9 @@
 # Ignore everything
-*
+# *
 
 # But not these files...
 !.gitignore
-!.config
+!.config/**
 !.config/nvim
-# etc...
 
+*
