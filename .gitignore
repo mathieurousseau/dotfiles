@@ -1,9 +1,13 @@
 # Ignore everything
-# *
+/*
+# /*/
 
-# But not these files...
-!.gitignore
-!.config/**
-!.config/nvim
+# .config
+!/.config
+/.config/*
+!/.config/lazygit/
+!/.config/nvim/
+!/.config/kitty/
 
-*
+# .hidden files
+.zshrc

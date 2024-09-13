@@ -1,0 +1,9 @@
+git:
+  paging:
+    colorArg: never
+    pager: ydiff -p cat -s --wrap --width={{columnWidth}}
+
+# quitOnTopLevelReturn: false
+gui:
+  sidePanelWidth: 0.25
+
