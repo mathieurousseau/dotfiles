@@ -167,17 +167,19 @@ export EDITOR=nvim
 export GPG_TTY=$TTY
 
 git_home() {
-  cd ~
+  # cd ~
   powerlevel10k_plugin_unload;
   PS1='DOTFILES:$(pwd)$ '
-  alias git='git --git-dir=.git_dotfiles'
+  # alias git='git --git-dir=~/.git_dotfiles'
+  export GIT_DIR=$HOME/.git_dotfiles
+  export GIT_WORK_TREE=$HOME
 }
 
 
 git_thescore_home() {
   powerlevel10k_plugin_unload;
   PS1='HOME_SCORE$ '
-  alias git_thescore='git --git-dir=.git_home_thescore'
+  alias git_thescore='git --git-dir=~.git_home_thescore'
 }
 # The next line updates PATH for the Google Cloud SDK.
 #if [ -f '/Users/Mathieu.Rousseau/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/Mathieu.Rousseau/Downloads/google-cloud-sdk/path.zsh.inc'; fi
