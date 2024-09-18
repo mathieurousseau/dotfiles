@@ -105,11 +105,14 @@ source $ZSH/oh-my-zsh.sh
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='nvim'
+fi
+
+GIT_EDITOR='nvim'
+VISUAL='nvim'
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -127,10 +130,6 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 . /opt/homebrew/opt/asdf/libexec/asdf.sh
 eval "$(direnv hook zsh)"
 
-#export GPG_TTY=$(tty)
-#GPG_TTY=$(tty) && export GPG_TTY
-eval $(ssh-agent)
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
@@ -141,10 +140,11 @@ source $(brew --prefix asdf)/libexec/asdf.sh
 alias gfs='git fetch && git status'
 
 alias mixw='mix test.watch --seed=0 '
+alias ls='gls --group-directories-first --color=auto'
+alias icat="kitten icat"
 
 alias clean_staging_repo='git branch  | grep -v staging | xargs git branch -D'
-
-export EDITOR=nvim
+alias repo_clean="git branch --merged develop | grep -v develop | xargs  git branch --delete"
 
 
 vip() {
@@ -155,6 +155,8 @@ vip() {
     nvim .
     cd -
 }
+alias mixw="mix test.watch --seed 0"
+alias gfs="git fetch && git status"
 
 if [ $USER = "Mathieu.Rousseau" ]; then
   cat << "EOF"
@@ -167,6 +169,10 @@ if [ $USER = "Mathieu.Rousseau" ]; then
     \/__/ \/_/\/_/\/____/ \/_____/\/____/\/___/  \/_/ \/____/
                                                              
 EOF
+
+#export GPG_TTY=$(tty)
+#GPG_TTY=$(tty) && export GPG_TTY
+eval $(ssh-agent)
 
 alias kill-global-protect='ps aux | grep -i globalprotect | awk '{ print $2 }' | sudo xargs kill -9'
 
@@ -191,7 +197,25 @@ alias k9s_staging='kubectx gke_scoremedia-staging_us-central1-a_scoremedia-stagi
 alias k9s_ps='kubectx gke_scoremedia-ps_us-central1-a_scoremedia-ps && k9s'
 alias k9s_prod='kubectx gke_scoremedia-production_us-central1_scoremedia-production && k9s'
 
-  
 export PATH=$PATH:/Users/Mathieu.Rousseau/.bin
 fi
 
+
+if [ $USER = "mathieu" ]; then
+  cat << "EOF"
+  
+ ███▄ ▄███▓ ▄▄▄     ▄▄▄█████▓ ██░ ██  ██▓▓█████  █    ██ 
+▓██▒▀█▀ ██▒▒████▄   ▓  ██▒ ▓▒▓██░ ██▒▓██▒▓█   ▀  ██  ▓██▒
+▓██    ▓██░▒██  ▀█▄ ▒ ▓██░ ▒░▒██▀▀██░▒██▒▒███   ▓██  ▒██░
+▒██    ▒██ ░██▄▄▄▄██░ ▓██▓ ░ ░▓█ ░██ ░██░▒▓█  ▄ ▓▓█  ░██░
+▒██▒   ░██▒ ▓█   ▓██▒ ▒██▒ ░ ░▓█▒░██▓░██░░▒████▒▒▒█████▓ 
+░ ▒░   ░  ░ ▒▒   ▓▒█░ ▒ ░░    ▒ ░░▒░▒░▓  ░░ ▒░ ░░▒▓▒ ▒ ▒ 
+░  ░      ░  ▒   ▒▒ ░   ░     ▒ ░▒░ ░ ▒ ░ ░ ░  ░░░▒░ ░ ░ 
+░      ░     ░   ▒    ░       ░  ░░ ░ ▒ ░   ░    ░░░ ░ ░ 
+       ░         ░  ░         ░  ░  ░ ░     ░  ░   ░     
+                                                         
+EOF
+
+  export PATH=$PATH:/Users/mathieu/development/flutter/bin:/Users/mathieu/Library/Android/sdk/platform-tools/
+  alias postgres="/opt/homebrew/opt/postgresql@14/bin/postgres -D /opt/homebrew/var/postgresql@14"
+fi
