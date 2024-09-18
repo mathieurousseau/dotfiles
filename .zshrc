@@ -137,18 +137,47 @@ eval $(ssh-agent)
 unset ASDF_DIR
 source $(brew --prefix asdf)/libexec/asdf.sh
 
-alias kill-global-protect='ps aux | grep -i globalprotect | awk '{ print $2 }' | sudo xargs kill -9'
 
 alias gfs='git fetch && git status'
+
+alias mixw='mix test.watch --seed=0 '
+
+alias clean_staging_repo='git branch  | grep -v staging | xargs git branch -D'
+
+export EDITOR=nvim
+
+
+vip() {
+    if [ "$1" != "" ] # or better, if [ -n "$1" ]
+    then
+        cd $1
+    fi
+    nvim .
+    cd -
+}
+
+if [ $USER = "Mathieu.Rousseau" ]; then
+  cat << "EOF"
+ __    __              ____                                  
+/\ \__/\ \            /\  _`\                                
+\ \ ,_\ \ \___      __\ \,\L\_\    ___    ___   _ __    __   
+ \ \ \/\ \  _ `\  /'__`\/_\__ \   /'___\ / __`\/\`'__\/'__`\ 
+  \ \ \_\ \ \ \ \/\  __/ /\ \L\ \/\ \__//\ \L\ \ \ \//\  __/ 
+   \ \__\\ \_\ \_\ \____\\ `\____\ \____\ \____/\ \_\\ \____\
+    \/__/ \/_/\/_/\/____/ \/_____/\/____/\/___/  \/_/ \/____/
+                                                             
+EOF
+
+alias kill-global-protect='ps aux | grep -i globalprotect | awk '{ print $2 }' | sudo xargs kill -9'
 
 alias kstg='kubectx | grep "aws*staging" | xargs -I{} kubectx {}'
 alias kprd='kubectx | grep production | xargs -I{} kubectx {}'
 alias klocal='kubectx docker-desktop'
 
-alias mixw='mix test.watch --seed=0 '
 alias opta_tunnel='kubectl -n optimus  get pods  -o name --no-headers=true | grep optimus-worker | xargs -I{} sudo tcpserver -v 127.0.0.1 443 kubectl -n optimus exec -i {} -- nc api.performfeeds.com 443'
 alias optimus_iex='optimus_staging=`kubectl -n optimus  get pods  -o name --no-headers=true` ; kubectl -n optimus exec -t -i $optimus_staging --  /app/bin/optimus remote'
-alias clean_staging_repo='git branch  | grep -v staging | xargs git branch -D'
+
+export GPG_TTY=$TTY
 
 alias gcp_mysql_dev='kubectx gke_scoremedia-dev_us-central1-a_scoremedia-dev; kubectl -n optimus  get pods  -o name --no-headers=true | grep optimus-worker | xargs -I{} sudo tcpserver -v 127.0.0.1 7771 kubectl -n optimus exec -i {} -- nc 10.96.5.7 3306'
 alias gcp_mysql_staging='kubectx gke_scoremedia-staging_us-central1-a_scoremedia-staging; kubectl -n optimus  get pods  -o name --no-headers=true | grep optimus-worker | xargs -I{} sudo tcpserver -v 127.0.0.1 7772 kubectl -n optimus exec -i {} -- nc 10.96.5.11 3306'
@@ -162,38 +191,7 @@ alias k9s_staging='kubectx gke_scoremedia-staging_us-central1-a_scoremedia-stagi
 alias k9s_ps='kubectx gke_scoremedia-ps_us-central1-a_scoremedia-ps && k9s'
 alias k9s_prod='kubectx gke_scoremedia-production_us-central1_scoremedia-production && k9s'
 
-export EDITOR=nvim
-
-export GPG_TTY=$TTY
-
-git_home() {
-  # cd ~
-  powerlevel10k_plugin_unload;
-  PS1='DOTFILES:$(pwd)$ '
-  # alias git='git --git-dir=~/.git_dotfiles'
-  export GIT_DIR=$HOME/.git_dotfiles
-  export GIT_WORK_TREE=$HOME
-}
-
-
-git_thescore_home() {
-  powerlevel10k_plugin_unload;
-  PS1='HOME_SCORE$ '
-  alias git_thescore='git --git-dir=~.git_home_thescore'
-}
-# The next line updates PATH for the Google Cloud SDK.
-#if [ -f '/Users/Mathieu.Rousseau/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/Mathieu.Rousseau/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-#if [ -f '/Users/Mathieu.Rousseau/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/Mathieu.Rousseau/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
-
+  
 export PATH=$PATH:/Users/Mathieu.Rousseau/.bin
+fi
 
-vip() {
-    if [ "$1" != "" ] # or better, if [ -n "$1" ]
-    then
-        cd $1
-    fi
-    nvim .
-    cd -
-}
