@@ -201,9 +201,6 @@ vim.keymap.set('n', '<c-h>', '<cmd>bp<cr>', { silent = true, desc = 'Previous bu
 vim.o.hlsearch = true
 -- vim.keymap.set('n', '<esc>', '<cmd>noh<cr><esc>', { silent = true })
 
--- I prefer cursor in the center
-vim.o.scrolloff = 999
-
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -371,7 +368,7 @@ require('lazy').setup({
         --   },
         -- },
         -- pickers = {}
-        pickers = { find_files = { hidden = true } },
+        -- pickers = { find_files = { hidden = true } },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
