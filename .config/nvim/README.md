@@ -1,10 +1,6 @@
 # kickstart.nvim
 
-brew install ripgrep 
-brew install lazygit
-brew install gh
-brew install font-hack-nerd-font
-brew install ydiff
+brew install ripgrep lazygit gh font-hack-nerd-font ydiff
 
 ## Introduction
 
