@@ -15,16 +15,16 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-#ZSH_THEME="robbyrussell"
+# ZSH_THEME="robbyrussell"
 #ZSH_THEME="random"
 ZSH_THEME="powerlevel10k/powerlevel10k"
-ZSH_THEME_RANDOM_IGNORED=(
-	sporty_256
-	geoffgarside
-	linuxonly
-	alanpeabody
-			
-)
+# ZSH_THEME_RANDOM_IGNORED=(
+# 	sporty_256
+# 	geoffgarside
+# 	linuxonly
+# 	alanpeabody
+# 			
+# )
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -54,7 +54,7 @@ ZSH_THEME_RANDOM_IGNORED=(
 # DISABLE_LS_COLORS="true"
 
 # Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
+DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
 # ENABLE_CORRECTION="true"
@@ -86,16 +86,32 @@ ZSH_THEME_RANDOM_IGNORED=(
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
+
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+
 plugins=(
 	git
 	macos
 	asdf
 	brew
 	docker
-	zsh-autosuggestions
 	)
 
 source $ZSH/oh-my-zsh.sh
+
+source /opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+  if type brew &>/dev/null; then
+    FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+
+    # autoload -Uz compinit
+    # compinit
+
+    source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+  fi
+
+
 
 # User configuration
 
@@ -146,14 +162,19 @@ alias icat="kitten icat"
 alias clean_staging_repo='git branch  | grep -v staging | xargs git branch -D'
 alias repo_clean="git branch --merged develop | grep -v develop | xargs  git branch --delete"
 
+# precmd () {print -Pn "\e]0;tota\a"}
+# precmd () {print -Pn "\e]0;tota\a"} 
+# unsetopt auto_name_dirs
 
 vip() {
-    if [ "$1" != "" ] # or better, if [ -n "$1" ]
-    then
-        cd $1
-    fi
-    nvim .
-    cd -
+  original_dir=$PWD
+  if [ "$1" != "" ] # or better, if [ -n "$1" ]
+  then
+      cd $1
+  fi
+  print -Pn "\e]0;`basename $PWD`\a"
+  nvim .
+  cd $original_dir
 }
 alias mixw="mix test.watch --seed 0"
 alias gfs="git fetch && git status"
@@ -219,3 +240,6 @@ EOF
   export PATH=$PATH:/Users/mathieu/development/flutter/bin:/Users/mathieu/Library/Android/sdk/platform-tools/
   alias postgres="/opt/homebrew/opt/postgresql@14/bin/postgres -D /opt/homebrew/var/postgresql@14"
 fi
+
+
+# precmd () {print -Pn "\e]0;tota\a"}

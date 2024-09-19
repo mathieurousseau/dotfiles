@@ -1,7 +1,5 @@
 # kickstart.nvim
 
-brew install ripgrep lazygit gh font-hack-nerd-font ydiff
-
 ## Introduction
 
 A starting point for Neovim that is:
