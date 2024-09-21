@@ -100,6 +100,9 @@ vim.g.have_nerd_font = true
 -- See `:help vim.opt`
 -- NOTE: You can change these options as you wish!
 --  For more options, you can see `:help option-list`
+--
+
+vim.wo.relativenumber = true
 
 -- Make line numbers default
 vim.opt.number = true
@@ -162,6 +165,10 @@ vim.opt.scrolloff = 10
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
+--
+-- Get current buffer file relative path
+vim.keymap.set('n', '<leader>fp', "<cmd>let @+ = expand(\"%:~:.\")<CR>", { desc = 'File relative path' })
+
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
@@ -194,8 +201,8 @@ vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower win
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- My Keymaps
-vim.keymap.set('n', '<c-l>', '<cmd>bn<cr>', { silent = true, desc = 'Next buffer' })
-vim.keymap.set('n', '<c-h>', '<cmd>bp<cr>', { silent = true, desc = 'Previous buffer' })
+vim.keymap.set('n', '<M-l>', '<cmd>bn<cr>', { silent = true, desc = 'Next buffer' })
+vim.keymap.set('n', '<M-h>', '<cmd>bp<cr>', { silent = true, desc = 'Previous buffer' })
 
 -- I like to turn search highlight on, and remove highlight whenever I press escape
 vim.o.hlsearch = true
@@ -368,7 +375,11 @@ require('lazy').setup({
         --   },
         -- },
         -- pickers = {}
-        pickers = { find_files = { hidden = true } },
+        pickers = { find_files = { hidden = true }, live_grep = {
+          additional_args = function(opts)
+            return { "--hidden" }
+          end
+        }, },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),

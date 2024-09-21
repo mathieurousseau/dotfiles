@@ -99,7 +99,8 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-source /opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+# bindkey -M menuselect '^M' .accept-line
+# source /opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
   if type brew &>/dev/null; then
