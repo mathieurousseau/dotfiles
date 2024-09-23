@@ -206,6 +206,10 @@ vim.keymap.set('n', '<M-h>', '<cmd>bp<cr>', { silent = true, desc = 'Previous bu
 
 -- I like to turn search highlight on, and remove highlight whenever I press escape
 vim.o.hlsearch = true
+
+-- Enable exec rc (needed for Flutter runs)
+vim.o.exrc = true
+
 -- vim.keymap.set('n', '<esc>', '<cmd>noh<cr><esc>', { silent = true })
 
 -- [[ Basic Autocommands ]]
@@ -402,6 +406,7 @@ require('lazy').setup({
       -- Enable Telescope extensions if they are installed
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
+      pcall(require("telescope").load_extension, "flutter")
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
@@ -416,6 +421,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader>,', builtin.buffers, { desc = '[ ] Find existing buffers' })
       vim.keymap.set('n', '<leader>sl', require("telescope").extensions.live_grep_args.live_grep_args, { noremap = true })
+      vim.keymap.set('n', '<leader>sf', require('telescope').extensions.flutter.commands, { noremap = true })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>b/', function()
@@ -621,6 +627,7 @@ require('lazy').setup({
         -- But for many setups, the LSP (`tsserver`) will work just fine
         -- tsserver = {},
         --
+        -- dartls = {},
         elixirls = {},
         lua_ls = {
           -- cmd = {...},
