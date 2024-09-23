@@ -19,8 +19,8 @@ brew install wget
 brew install tree-sitter
 brew install openssl@1.1
 brew install zsh-autosuggestions
-brew install zsh-autocomplete
 brew install zsh-syntax-highlighting
+brew install fzf
 
 # theScore specific
 

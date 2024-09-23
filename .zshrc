@@ -95,22 +95,21 @@ plugins=(
 	asdf
 	brew
 	docker
+	fzf-tab
 	)
+
+FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+autoload -Uz compinit
+compinit
 
 source $ZSH/oh-my-zsh.sh
 
 # bindkey -M menuselect '^M' .accept-line
 # source /opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+
+
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-  if type brew &>/dev/null; then
-    FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
-
-    # autoload -Uz compinit
-    # compinit
-
-    source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-  fi
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 
 
