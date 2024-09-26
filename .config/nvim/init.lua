@@ -370,6 +370,7 @@ require('lazy').setup({
       local lga_actions = require("telescope-live-grep-args.actions")
 
       require('telescope').setup {
+        defaults = { path_display = { "truncate" } },
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
@@ -379,11 +380,15 @@ require('lazy').setup({
         --   },
         -- },
         -- pickers = {}
-        pickers = { find_files = { hidden = true }, live_grep = {
-          additional_args = function(opts)
-            return { "--hidden" }
-          end
-        }, },
+        pickers = {
+          find_files = {
+            hidden = true
+          },
+          live_grep = {
+            additional_args = function(opts)
+              return { "--hidden" }
+            end
+          }, },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
