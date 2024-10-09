@@ -87,6 +87,8 @@ DISABLE_AUTO_TITLE="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 
+eval "$(/opt//homebrew/bin/brew shellenv)"
+
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 plugins=(
@@ -101,7 +103,6 @@ plugins=(
 FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
 autoload -Uz compinit
 compinit
-
 source $ZSH/oh-my-zsh.sh
 
 # bindkey -M menuselect '^M' .accept-line
@@ -142,7 +143,6 @@ VISUAL='nvim'
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 export DIRENV_LOG_FORMAT=""
-eval "$(/opt/homebrew/bin/brew shellenv)"
 . /opt/homebrew/opt/asdf/libexec/asdf.sh
 eval "$(direnv hook zsh)"
 
@@ -213,10 +213,10 @@ alias gcp_postgres_dev='kubectx gke_scoremedia-dev_us-central1-a_scoremedia-dev;
 alias gcp_postgres_staging='kubectx gke_scoremedia-staging_us-central1-a_scoremedia-staging; kubectl -n optimus  get pods  -o name --no-headers=true | grep optimus-worker | xargs -I{} sudo tcpserver -v 127.0.0.1 8882 kubectl -n optimus exec -i {} -- nc 10.96.1.61 5432'
 alias gcp_postgres_ps='kubectx gke_scoremedia-ps_us-central1-a_scoremedia-ps; kubectl -n optimus  get pods  -o name --no-headers=true | grep optimus-worker | xargs -I{} sudo tcpserver -v 127.0.0.1 8883 kubectl -n optimus exec -i {} -- nc 10.96.1.231 5432'
 
-alias k9s_dev='kubectx gke_scoremedia-dev_us-central1-a_scoremedia-dev && k9s'
-alias k9s_staging='kubectx gke_scoremedia-staging_us-central1-a_scoremedia-staging && k9s'
-alias k9s_ps='kubectx gke_scoremedia-ps_us-central1-a_scoremedia-ps && k9s'
-alias k9s_prod='kubectx gke_scoremedia-production_us-central1_scoremedia-production && k9s'
+alias k9s_dev='kubectx scoremedia-dev && k9s'
+alias k9s_staging='kubectx scoremedia-staging && k9s'
+alias k9s_ps='kubectx scoremedia-ps && k9s'
+alias k9s_prod='kubectx scoremedia-production && k9s'
 
 export PATH=$PATH:/Users/Mathieu.Rousseau/.bin
 fi
