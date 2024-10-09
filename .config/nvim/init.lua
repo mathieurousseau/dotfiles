@@ -874,7 +874,7 @@ require('lazy').setup({
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
       -- vim.cmd.colorscheme 'tokyonight-night'
-      vim.cmd.colorscheme 'carbonfox'
+      vim.cmd.colorscheme 'kanagawa-dragon'
       -- vim.cmd.colorscheme 'main'
 
       -- You can configure highlights by doing something like:
