@@ -29,3 +29,16 @@ brew install google-cloud-sdk redis kubectx
 # oh my zsh plugins
 git clone https://github.com/Aloxaf/fzf-tab ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab
 
+## Enable ctrl+cmd+click window
+
+`defaults write -g NSWindowShouldDragOnGesture -bool true`
+
+# disabling it:
+`defaults delete -g NSWindowShouldDragOnGesture`
+
+## Bluetooth Logitech + Headset issue:
+
+`sudo defaults write /Library/Preferences/com.apple.airport.bt.plist bluetoothCoexMgmt Hybrid`
+
+# disabling it:
+`sudo defaults delete /Library/Preferences/com.apple.airport.bt.plist bluetoothCoexMgmt`
