@@ -20,18 +20,11 @@ return {
   },
   config = function()
     local bufferline = require("bufferline")
-    -- local selected = "#00ff00"
-    local selected = "#6c5382"
-    local red = "#ff0000"
-    local blue = "#0000ff"
-    -- local green = "00ff00"
+    local selected_bg = "#2e4f67"
+    local selected_fg = "#d18c61"
 
     bufferline.setup({
 
-      -- vim.opt.termguicolors = true,
-      -- config = function()
-      -- vim.opt.termguicolors = true
-      -- require("bufferline").setup {
       options = {
         -- indicator = { style = "underline" },
         separator_style = "slope",
@@ -67,8 +60,8 @@ return {
         --   bg = blue
         -- },
         buffer_selected = {
-          -- fg = red,
-          bg = selected,
+          fg = selected_fg,
+          bg = selected_bg,
         },
         -- buffer_visible = {
         --   fg = green,
@@ -76,10 +69,10 @@ return {
         -- },
         separator_selected = {
           -- fg = green,
-          bg = selected
+          bg = selected_bg
         },
         numbers_selected = {
-          bg = selected
+          bg = selected_bg
         },
         -- separator = {
         --   bg = red,
@@ -113,38 +106,38 @@ return {
         --   sp = blue,
         -- },
         diagnostic_selected = {
-          bg = selected
+          bg = selected_bg
         },
 
         hint_diagnostic_selected = {
-          bg = selected
+          bg = selected_bg
         },
         hint_selected = {
-          bg = selected
+          bg = selected_bg
         },
         info_selected = {
-          bg = selected
+          bg = selected_bg
         },
         error_selected = {
-          bg = selected
+          bg = selected_bg
         },
         error_diagnostic_selected = {
-          bg = selected
+          bg = selected_bg
         },
         warning_diagnostic_selected = {
-          bg = selected
+          bg = selected_bg
         },
         warning_selected = {
-          bg = selected
+          bg = selected_bg
         },
         info_diagnostic_selected = {
-          bg = selected
+          bg = selected_bg
         },
         close_button_selected = {
-          bg = selected
+          bg = selected_bg
         },
         modified_selected = {
-          bg = selected
+          bg = selected_bg
         }
         -- 	-- separator_visible = {
         -- 	-- 	bg = "#1e1e2e",
