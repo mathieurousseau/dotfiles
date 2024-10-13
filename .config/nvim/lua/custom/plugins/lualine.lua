@@ -1,5 +1,6 @@
 return {
-  dir = '~/Projects/lualine.nvim/',
+  -- dir = '~/Projects/lualine.nvim/',
+  'mathieurousseau/lualine.nvim',
   config = function()
     require('lualine').setup {
       options           = {
