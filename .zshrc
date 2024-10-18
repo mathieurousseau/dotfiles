@@ -162,6 +162,8 @@ alias icat="kitten icat"
 alias clean_staging_repo='git branch  | grep -v staging | xargs git branch -D'
 alias repo_clean="git branch --merged develop | grep -v develop | xargs  git branch --delete"
 
+export PATH=$PATH:~/.bin
+
 # precmd () {print -Pn "\e]0;tota\a"}
 # precmd () {print -Pn "\e]0;tota\a"} 
 # unsetopt auto_name_dirs
@@ -218,7 +220,6 @@ alias k9s_staging='kubectx scoremedia-staging && k9s'
 alias k9s_ps='kubectx scoremedia-ps && k9s'
 alias k9s_prod='kubectx scoremedia-production && k9s'
 
-export PATH=$PATH:/Users/Mathieu.Rousseau/.bin
 fi
 
 
@@ -240,6 +241,3 @@ EOF
   export PATH=$PATH:/Users/mathieu/development/flutter/bin:/Users/mathieu/Library/Android/sdk/platform-tools/
   alias postgres="/opt/homebrew/opt/postgresql@14/bin/postgres -D /opt/homebrew/var/postgresql@14"
 fi
-
-
-# precmd () {print -Pn "\e]0;tota\a"}
