@@ -197,8 +197,6 @@ EOF
 #GPG_TTY=$(tty) && export GPG_TTY
 eval $(ssh-agent)
 
-alias kill-global-protect='ps aux | grep -i globalprotect | awk '{ print $2 }' | sudo xargs kill -9'
-
 alias kstg='kubectx | grep "aws*staging" | xargs -I{} kubectx {}'
 alias kprd='kubectx | grep production | xargs -I{} kubectx {}'
 alias klocal='kubectx docker-desktop'
