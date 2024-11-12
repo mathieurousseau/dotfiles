@@ -87,7 +87,9 @@ DISABLE_AUTO_TITLE="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 
-eval "$(/opt//homebrew/bin/brew shellenv)"
+if [ ! -f "/etc/arch-release" ]; then
+  eval "$(/opt//homebrew/bin/brew shellenv)"
+fi
 
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
@@ -100,7 +102,11 @@ plugins=(
 	fzf-tab
 	)
 
-FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+if [ -f "/etc/arch-release" ]; then
+  # FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+else
+  FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+fi
 autoload -Uz compinit
 compinit
 source $ZSH/oh-my-zsh.sh
@@ -109,10 +115,13 @@ source $ZSH/oh-my-zsh.sh
 # source /opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
 
+if [ -f "/etc/arch-release" ]; then
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh
+else
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-
+fi
 
 # User configuration
 
@@ -143,20 +152,23 @@ VISUAL='nvim'
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 export DIRENV_LOG_FORMAT=""
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
+if [ -f /etc/arch-release ]; then
+  . /opt/asdf-vm/asdf.sh
+else
+  . /opt/homebrew/opt/asdf/libexec/asdf.sh
+fi
 eval "$(direnv hook zsh)"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 unset ASDF_DIR
-source $(brew --prefix asdf)/libexec/asdf.sh
+# source $(brew --prefix asdf)/libexec/asdf.sh
 
 
 alias gfs='git fetch && git status'
 
 alias mixw='mix test.watch --seed=0 '
-alias ls='gls --group-directories-first --color=auto'
 alias icat="kitten icat"
 
 alias clean_staging_repo='git branch  | grep -v staging | xargs git branch -D'
@@ -180,6 +192,14 @@ vip() {
 }
 alias mixw="mix test.watch --seed 0"
 alias gfs="git fetch && git status"
+
+if [ -f "/etc/arch-release" ]; then
+  alias ls='ls --group-directories-first --color=auto'
+  eval $(ssh-agent)
+else
+  alias ls='gls --group-directories-first --color=auto'
+fi
+
 
 if [ $USER = "Mathieu.Rousseau" ]; then
   cat << "EOF"

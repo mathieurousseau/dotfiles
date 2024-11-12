@@ -22,6 +22,30 @@ zsh-autosuggestions \
 zsh-syntax-highlighting \
 fzf
 
+# Arch linux (package list not up to date. some to install through paru)
+pacman -S kitty \
+direnv \
+asdf \
+neovim \
+ripgrep lazygit gh font-hack-nerd-font ydiff \
+zsh-completions \
+git \
+gh \
+gnupg \
+gnu-sed \
+hq \
+jq \
+k9s \
+nnn \
+stow \
+wget \
+tree-sitter \
+openssl@1.1 \
+zsh-autosuggestions \
+zsh-syntax-highlighting \
+fzf
+ 
+
 # theScore specific
 
 brew install google-cloud-sdk redis kubectx
