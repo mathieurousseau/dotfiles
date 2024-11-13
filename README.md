@@ -20,7 +20,13 @@ tree-sitter \
 openssl@1.1 \
 zsh-autosuggestions \
 zsh-syntax-highlighting \
-fzf
+fzf \
+
+
+brew tap FelixKratz/formulae
+brew install borders
+brew install --cask nikitabobko/tap/aerospace 
+
 
 # Arch linux (package list not up to date. some to install through paru)
 pacman -S kitty \

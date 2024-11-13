@@ -186,7 +186,7 @@ vip() {
   then
       cd $1
   fi
-  print -Pn "\e]0;`basename $PWD`\a"
+  # print -Pn "\e]0;`basename $PWD`\a"
   nvim .
   cd $original_dir
 }
@@ -233,10 +233,10 @@ alias gcp_postgres_dev='kubectx gke_scoremedia-dev_us-central1-a_scoremedia-dev;
 alias gcp_postgres_staging='kubectx gke_scoremedia-staging_us-central1-a_scoremedia-staging; kubectl -n optimus  get pods  -o name --no-headers=true | grep optimus-worker | xargs -I{} sudo tcpserver -v 127.0.0.1 8882 kubectl -n optimus exec -i {} -- nc 10.96.1.61 5432'
 alias gcp_postgres_ps='kubectx gke_scoremedia-ps_us-central1-a_scoremedia-ps; kubectl -n optimus  get pods  -o name --no-headers=true | grep optimus-worker | xargs -I{} sudo tcpserver -v 127.0.0.1 8883 kubectl -n optimus exec -i {} -- nc 10.96.1.231 5432'
 
-alias k9s_dev='kubectx scoremedia-dev && k9s'
-alias k9s_staging='kubectx scoremedia-staging && k9s'
-alias k9s_ps='kubectx scoremedia-ps && k9s'
-alias k9s_prod='kubectx scoremedia-production && k9s'
+alias k_dev='kubectx scoremedia-dev && k9s'
+alias k_staging='kubectx scoremedia-staging && k9s'
+alias k_ps='kubectx scoremedia-ps && k9s'
+alias k_prod='kubectx scoremedia-production && k9s'
 
 fi
 
