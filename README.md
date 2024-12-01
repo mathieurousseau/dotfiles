@@ -75,3 +75,11 @@ git clone https://github.com/Aloxaf/fzf-tab ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/p
 
 # nvim html language server
 `npm i -g vscode-langservers-extracted`
+
+
+
+# ARCH LINUX
+
+## XORG
+/etc/X11/xorg.conf.d/30-touchpad.conf
+
