@@ -54,8 +54,8 @@ fi
 # xterm -geometry 80x20+494-0 &
 # exec xterm -geometry 80x66+0+0 -name login
 #
-xinput disable 16
-xrandr --output eDP1 --off --output HDMI1 --primary --auto
+# xinput disable 16
+# xrandr --output eDP1 --off --output HDMI1 --primary --auto
 xset r rate 400 50
 exec i3
-xrandr --output eDP1 --off --output  HDMI1 --primary --auto
+# xrandr --output eDP1 --off --output  HDMI1 --primary --auto
