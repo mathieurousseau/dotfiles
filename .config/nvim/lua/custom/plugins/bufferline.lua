@@ -22,6 +22,8 @@ return {
     local bufferline = require("bufferline")
     local selected_bg = "#2e4f67"
     local selected_fg = "#d18c61"
+    local red = "#ff0000"
+    local green = "#40FF40"
 
     bufferline.setup({
 
@@ -54,11 +56,11 @@ return {
         -- 		fg = "#ffffff",
         -- 		bg = "#1e1e2e",
         -- 	},
-        -- background = {
-        --   -- 		bg = "#1e1e2e",
-        --   -- fg = red,
-        --   bg = blue
-        -- },
+        duplicate_selected = {
+          --   -- 		bg = "#1e1e2e",
+          fg = selected_fg,
+          bg = selected_bg,
+        },
         buffer_selected = {
           fg = selected_fg,
           bg = selected_bg,
@@ -68,7 +70,6 @@ return {
         --   bg = green,
         -- },
         separator_selected = {
-          -- fg = green,
           bg = selected_bg
         },
         numbers_selected = {

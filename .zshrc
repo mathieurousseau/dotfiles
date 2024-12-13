@@ -186,7 +186,11 @@ vip() {
   then
       cd $1
   fi
-  # print -Pn "\e]0;`basename $PWD`\a"
+  print -Pn "\e]0;`basename $PWD`\a"
+  # proj=`basename $PWD`
+  # echo $proj
+  # cd ..
+  # nvim $proj
   nvim .
   cd $original_dir
 }
