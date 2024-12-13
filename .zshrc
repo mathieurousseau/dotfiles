@@ -263,3 +263,6 @@ EOF
   export PATH=$PATH:/Users/mathieu/development/flutter/bin:/Users/mathieu/Library/Android/sdk/platform-tools/
   alias postgres="/opt/homebrew/opt/postgresql@14/bin/postgres -D /opt/homebrew/var/postgresql@14"
 fi
+
+export PATH="/home/mathieu/.local/bin:$PATH"
+
