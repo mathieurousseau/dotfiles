@@ -1,0 +1,10 @@
+configuration {
+  show-icons: true;
+  icon-theme: "Papirus";
+  }
+
+@theme "arthur"
+
+* {
+  font: "Hack Nerd Font Mono 18";
+}
