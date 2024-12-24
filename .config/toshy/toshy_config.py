@@ -691,6 +691,7 @@ keyboards_UserCustom_dct = {
     'Corne Keyboard': 'Apple',
     'HHKB_Hybrid_1 Keyboard': 'Apple',
     'PFU Limited HHKB-Hybrid Keyboard': 'Apple',
+    'ZMK Project Corne Keyboard': 'Apple'
 }
 
 ###  SLICE_MARK_END: kbtype_override  ###  EDITS OUTSIDE THESE MARKS WILL BE LOST ON UPGRADE
