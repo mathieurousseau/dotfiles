@@ -102,7 +102,7 @@ bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 
 # toggle tiling / floating
-# bindsym $mod+Shift+space floating toggle
+bindsym $mod+Shift+space floating toggle
 
 # change focus between tiling / floating windows
 # bindsym $mod+space focus mode_toggle
@@ -115,24 +115,30 @@ bindsym $mod+a focus parent
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
+set $wsB "B"
 set $wsC "C"
 set $wsD "D"
 set $wsT "T"
 set $wsG "G"
+set $wsM "M"
 set $wsP "P"
 
 # switch to workspace
+bindsym $mod+B workspace $wsB
 bindsym $mod+C workspace $wsC
 bindsym $mod+D workspace $wsD
 bindsym $mod+T workspace $wsT
 bindsym $mod+G workspace $wsG
+bindsym $mod+M workspace $wsM
 bindsym $mod+P workspace $wsP
 
 # move focused container to workspace
+bindsym $mod+Shift+B move container to workspace $wsB
 bindsym $mod+Shift+C move container to workspace $wsC
 bindsym $mod+Shift+D move container to workspace $wsD
 bindsym $mod+Shift+T move container to workspace $wsT
 bindsym $mod+Shift+G move container to workspace $wsG
+bindsym $mod+Shift+M move container to workspace $wsM
 bindsym $mod+Shift+P move container to workspace $wsP
 
 # reload the configuration file
@@ -147,6 +153,7 @@ for_window [class="kitty"] border pixel 3
 gaps inner 10
 
 exec_always feh --bg-scale ~/Documents/wallpapers/kanagawa.jpeg
+set $base05 #dcd7ba
 ## Base16 Kanagawa
 # Scheme author: Tommaso Laurenzi (https://github.com/rebelot)
 # Template author: Tinted Theming (https://github.com/tinted-theming)
@@ -165,7 +172,8 @@ set $base08 #c34043
 set $base09 #ffa066
 set $base0A #c0a36e
 set $base0B #76946a
-set $base0C #6a9589
+set $base0C #d18c61
+# set $base0C #6a9589
 set $base0D #7e9cd8
 set $base0E #957fb8
 set $base0F #d27e99

@@ -159,8 +159,9 @@ sys.path.insert(0, current_folder_path)
 import lib.env
 
 from lib.env_context import EnvironmentInfo
-from lib.settings_class import Settings
+from lib.machine_context import get_machine_id_hash
 from lib.notification_manager import NotificationManager
+from lib.settings_class import Settings
 
 assets_path         = os.path.join(current_folder_path, 'assets')
 icon_file_active    = os.path.join(assets_path, "toshy_app_icon_rainbow.svg")
@@ -305,6 +306,13 @@ except NameError:
     pass
 
 
+# Global variable to store the local machine ID at runtime, for machine-specific keymaps.
+# Allows syncing a single config file between different machines without overlapping the
+# hardware/media key overrides, or any other machine-specific customization.
+# Get the ID for each machine with the `toshy-machine-id` command, for use in `if` conditions.
+MACHINE_ID = get_machine_id_hash()
+
+
 
 #################  VARIABLES  ####################
 ###                                            ###
@@ -410,6 +418,7 @@ def create_list_of_dicts(lst: List[str]):
 
 terminals = [
     "alacritty",
+    "com.mitchellh.ghostty",
     "com.raggesilver.BlackBox",
     "com.system76.CosmicTerm",
     "contour",
@@ -417,6 +426,8 @@ terminals = [
     "deepin-terminal",
     "dev.warp.Warp",
     "eterm",
+    "ghostty",
+    "ghostty-debug",
     "gnome-terminal",
     "gnome-terminal-server",
     "guake",
@@ -451,9 +462,10 @@ terminals = [
     "tilda",
     "tilix",
     "urxvt",
+    "Wave",
     "xfce4-terminal",
     "xterm",
-    "yakuake"
+    "yakuake",
 ]
 terminals                       = [x.casefold() for x in terminals]
 termStr                         = toRgxStr(terminals)
@@ -507,6 +519,7 @@ remotes = [
     "Anydesk",
     "Gnome-boxes",
     "gnome-connections",
+    "org.gnome.Boxes",
     "org.remmina.Remmina",
     "Nxplayer.bin",
     "remmina",
@@ -689,8 +702,8 @@ keyboards_UserCustom_dct = {
     # Valid types to map device to: Apple, Windows, IBM, Chromebook (case sensitive)
     # Example:
     'Corne Keyboard': 'Apple',
-    'HHKB_Hybrid_1 Keyboard': 'Apple',
-    'PFU Limited HHKB-Hybrid Keyboard': 'Apple',
+    # 'HHKB_Hybrid_1 Keyboard': 'Apple',
+    # 'PFU Limited HHKB-Hybrid Keyboard': 'Apple',
     'ZMK Project Corne Keyboard': 'Apple'
 }
 
@@ -1218,8 +1231,8 @@ def is_valid_command(command):
 # Result will be None if DE is not in list OR if 'kdialog' not available.
 # kdialog_cmd = shutil.which('kdialog') if DESKTOP_ENV.casefold() in ['kde', 'lxqt'] else None
 # DISABLING KDIALOG BECAUSE IT KIND OF SUCKS QUITE A BIT COMPARED TO ZENITY/QARMA
-# kdialog_cmd = shutil.which('kdialog') if DESKTOP_ENV.casefold() in ['kdialog_is_lame'] else None
 kdialog_cmd = None
+kdialog_cmd = shutil.which('kdialog') if DESKTOP_ENV.casefold() in ['kdialog_is_lame'] else None
 
 
 zenity_is_qarma = False
@@ -1401,41 +1414,6 @@ def toggle_and_show_numlock_state(ctx: KeyContext):
         icon = 'input-num-on' if not ctx.numlock_on else 'window-close'
         ntfy.send_notification(message, icon, 'low', False)
         return C("NumLock")
-
-
-# Global variable to store the local machine ID at runtime, for machine-specific keymaps.
-# Allows syncing a single config file between different machines without overlapping the
-# hardware/media key overrides, or any other machine-specific customization.
-# Get the ID for each machine from /var/lib/dbus/machine-id for use in `if` conditions.
-MACHINE_ID = None
-
-
-def read_machine_id():
-    """Reads the machine ID from the D-Bus or systemd file and stores it in a global variable."""
-    global MACHINE_ID
-    paths = ["/var/lib/dbus/machine-id", "/etc/machine-id"]
-
-    for path in paths:
-        try:
-            with open(path, "r") as f:
-                MACHINE_ID = f.read().strip()
-                obfuscated_ID = f"{MACHINE_ID[:5]} ... {MACHINE_ID[-5:]}"
-                debug(f"Machine ID successfully read from {path} (obfuscated): '{obfuscated_ID}'")
-                return  # Exit after successfully reading the ID
-        except FileNotFoundError:
-            continue  # Try the next file if this one is missing
-        except PermissionError:
-            error(f"Permission denied when trying to read {path}.")
-            return
-        except Exception as e:
-            error(f"Unexpected error occurred while reading {path}: {e}")
-            return
-
-    # If no valid machine ID is found
-    error("Error: Could not retrieve a valid machine ID from known paths.")
-
-
-read_machine_id()
 
 
 
@@ -4283,6 +4261,10 @@ keymap("Deepin Terminal overrides", {
     C("RC-equal"):              C("C-equal"),                   # Increase font size/zoom in
 }, when = matchProps(clas="^deepin-terminal$"))
 
+keymap("Ghostty terminal overrides", {
+    C("RC-Equal"):              C("C-Equal"),                   # Increase font size [override general terminals remap]
+}, when = matchProps(clas="^ghostty$|^ghostty-debug$|^com.mitchellh.ghostty$"))
+
 keymap("Hyper terminal tab switching", {
     C("RC-Equal"):              C("C-Equal"),                   # Increase font size [override general terminals remap]
     C("Shift-LC-Tab"):          C("Shift-C-Tab"),               # Tab nav: Go to prior tab (left) [override general remap]
@@ -4307,6 +4289,14 @@ keymap("Terminology terminal", {
     C("RC-Minus"):              C("C-Alt-Minus"),               # Decrease font size
     C("RC-Equal"):              C("C-Alt-Equal"),               # Increase font size
 }, when = matchProps(clas="^terminology$"))
+
+keymap("Wave terminal", {
+    C("RC-t"):                  C("Alt-t"),                     # Open a new tab
+    C("RC-n"):                  C("Alt-n"),                     # Open a new terminal block
+    C("Shift-RC-n"):            C("Shift-Alt-n"),               # Open a new window
+    C("RC-w"):                  C("Alt-w"),                     # Close the current block
+    C("Shift-RC-w"):            C("Shift-Alt-w"),               # Close the current tab
+}, when = matchProps(clas="^Wave$"))
 
 keymap("Xfce4 terminal", {
     C("RC-comma"):      [C("Alt-e"), sleep(0.1), C("e")],       # Open Preferences dialog
@@ -4483,6 +4473,15 @@ keymap("General Terminals", {
     C("RC-Dot"):                C("C-c"),                       # Mimic macOS Cmd+Dot to cancel command
     # C("RC-SLASH"):              C("C-Shift-SLASH"),             # No function - RE-ENABLE IF SOMEONE REPORTS
     # C("RC-KPASTERISK"):         C("C-Shift-KPASTERISK"),        # No function - RE-ENABLE IF SOMEONE REPORTS
+
+    # Allow access to Linux TTY virtual consoles with the usual physical key locations (General Terminals)
+    C("LC-RC-F1"):              C("C-Alt-F1"),                  # Go to TTY virtual console 1
+    C("LC-RC-F2"):              C("C-Alt-F2"),                  # Go to TTY virtual console 2
+    C("LC-RC-F3"):              C("C-Alt-F3"),                  # Go to TTY virtual console 3
+    C("LC-RC-F4"):              C("C-Alt-F4"),                  # Go to TTY virtual console 4
+    C("LC-RC-F5"):              C("C-Alt-F5"),                  # Go to TTY virtual console 5
+    C("LC-RC-F6"):              C("C-Alt-F6"),                  # Go to TTY virtual console 6
+    C("LC-RC-F7"):              C("C-Alt-F7"),                  # Go to TTY virtual console 7
 
 }, when = lambda ctx:
     cnfg.screen_has_focus and
@@ -4885,6 +4884,15 @@ keymap("General GUI", {
     C("Alt-Delete"):            C("C-Delete"),                  # Delete Right Word of Cursor
     C("Shift-Alt-Backspace"):   C("C-Backspace"),               # Delete word left of cursor
     C("Shift-Alt-Delete"):      C("C-Delete"),                  # Delete word right of cursor
+
+    # Allow access to Linux TTY virtual consoles with the usual physical key locations (General GUI)
+    C("Super-RC-F1"):           C("C-Alt-F1"),                  # Go to TTY virtual console 1
+    C("Super-RC-F2"):           C("C-Alt-F2"),                  # Go to TTY virtual console 2
+    C("Super-RC-F3"):           C("C-Alt-F3"),                  # Go to TTY virtual console 3
+    C("Super-RC-F4"):           C("C-Alt-F4"),                  # Go to TTY virtual console 4
+    C("Super-RC-F5"):           C("C-Alt-F5"),                  # Go to TTY virtual console 5
+    C("Super-RC-F6"):           C("C-Alt-F6"),                  # Go to TTY virtual console 6
+    C("Super-RC-F7"):           C("C-Alt-F7"),                  # Go to TTY virtual console 7
 
     # C("RC-Left"):               C("C-LEFT_BRACE"),              # Firefox-nw - Back
     # C("RC-Right"):              C("C-RIGHT_BRACE"),             # Firefox-nw - Forward
