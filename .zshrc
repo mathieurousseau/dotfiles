@@ -155,15 +155,13 @@ export DIRENV_LOG_FORMAT=""
 if [ -f /etc/arch-release ]; then
   . /opt/asdf-vm/asdf.sh
 else
-  . /opt/homebrew/opt/asdf/libexec/asdf.sh
+  export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 fi
 eval "$(direnv hook zsh)"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-unset ASDF_DIR
-# source $(brew --prefix asdf)/libexec/asdf.sh
 
 
 alias gfs='git fetch && git status'
@@ -242,6 +240,8 @@ alias k_staging='kubectx scoremedia-staging && k9s'
 alias k_ps='kubectx scoremedia-ps && k9s'
 alias k_prod='kubectx scoremedia-production && k9s'
 
+export PATH=$PATH:/opt/homebrew/opt/mysql-client/bin
+
 fi
 
 
@@ -263,6 +263,3 @@ EOF
   export PATH=$PATH:/Users/mathieu/development/flutter/bin:/Users/mathieu/Library/Android/sdk/platform-tools/
   alias postgres="/opt/homebrew/opt/postgresql@14/bin/postgres -D /opt/homebrew/var/postgresql@14"
 fi
-
-export PATH="/home/mathieu/.local/bin:$PATH"
-

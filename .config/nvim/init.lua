@@ -178,11 +178,15 @@ vim.opt.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 -- Theme
 vim.opt.termguicolors = true
 
+-- Spellcheck
+vim.opt.spell = true
+vim.opt.spelllang = "en_us"
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 --
 -- Get current buffer file relative path
-vim.keymap.set('n', '<leader>fp', "<cmd>let @+ = expand(\"%:~:.\")<CR>", { desc = 'File relative path' })
+vim.keymap.set('n', '<leader>bf', "<cmd>let @+ = expand(\"%:~:.\")<CR>", { desc = 'File relative path' })
 
 
 -- Clear highlights on search when pressing <Esc> in normal mode
@@ -655,7 +659,7 @@ require('lazy').setup({
         --
         -- dartls = {},
         html = {},
-        elixirls = {},
+        -- elixirls = {},
         lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
@@ -891,12 +895,21 @@ require('lazy').setup({
       vim.cmd.colorscheme 'kanagawa-dragon'
       -- vim.cmd.colorscheme 'main'
 
-      -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
-      vim.cmd.hi 'DiffAdd cterm=reverse ctermfg=35 ctermbg=16 gui=reverse guifg=#00af5f guibg=#000000'
-      vim.cmd.hi 'DiffChange cterm=reverse ctermfg=111 ctermbg=16 gui=reverse guifg=#87afff guibg=#000000'
-      vim.cmd.hi 'DiffDelete cterm=reverse ctermfg=161 ctermbg=16 gui=reverse guifg=#d7005f guibg=#000000'
-      vim.cmd.hi 'DiffText cterm=reverse ctermfg=213 ctermbg=16 gui=reverse guifg=#ff87ff guibg=#000000'
+      vim.cmd.hi 'DiffAdd gui=none cterm=none'
+      vim.cmd.hi 'DiffAdd guibg=#336009 ctermfg=193 ctermbg=22'
+      vim.cmd.hi 'DiffChange	gui=none cterm=none'
+      vim.cmd.hi 'DiffChange	guibg=#2B5B77 ctermfg=NONE ctermbg=24'
+      vim.cmd.hi 'DiffDelete	gui=none cterm=none'
+
+      vim.cmd.hi 'DiffText	guibg=#000000 ctermfg=110 ctermbg=16'
+      vim.cmd.hi 'DiffText	gui=reverse cterm=reverse'
+      vim.cmd.hi 'DiffText	guifg=#8fbfdc guibg=#000000 ctermfg=110 ctermbg=16'
+
+      vim.cmd.hi 'diffAdded	gui=none cterm=none'
+      vim.cmd.hi 'diffAdded	guifg=#d2ebbe guibg=#437019 ctermfg=193 ctermbg=22'
+      vim.cmd.hi 'diffRemoved	gui=none cterm=none'
+      -- vim.cmd.hi 'diffRemoved	guifg=#b05059 guibg=#40000a ctermfg=16 ctermbg=52'
     end,
   },
 
