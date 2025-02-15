@@ -245,21 +245,44 @@ export PATH=$PATH:/opt/homebrew/opt/mysql-client/bin
 fi
 
 
-if [ $USER = "mathieu" ]; then
+# if [ $USER = "mathieu"  ]; then
+#   cat << "EOF"
+#   
+#  ███▄ ▄███▓ ▄▄▄     ▄▄▄█████▓ ██░ ██  ██▓▓█████  █    ██ 
+# ▓██▒▀█▀ ██▒▒████▄   ▓  ██▒ ▓▒▓██░ ██▒▓██▒▓█   ▀  ██  ▓██▒
+# ▓██    ▓██░▒██  ▀█▄ ▒ ▓██░ ▒░▒██▀▀██░▒██▒▒███   ▓██  ▒██░
+# ▒██    ▒██ ░██▄▄▄▄██░ ▓██▓ ░ ░▓█ ░██ ░██░▒▓█  ▄ ▓▓█  ░██░
+# ▒██▒   ░██▒ ▓█   ▓██▒ ▒██▒ ░ ░▓█▒░██▓░██░░▒████▒▒▒█████▓ 
+# ░ ▒░   ░  ░ ▒▒   ▓▒█░ ▒ ░░    ▒ ░░▒░▒░▓  ░░ ▒░ ░░▒▓▒ ▒ ▒ 
+# ░  ░      ░  ▒   ▒▒ ░   ░     ▒ ░▒░ ░ ▒ ░ ░ ░  ░░░▒░ ░ ░ 
+# ░      ░     ░   ▒    ░       ░  ░░ ░ ▒ ░   ░    ░░░ ░ ░ 
+#        ░         ░  ░         ░  ░  ░ ░     ░  ░   ░     
+#                                                          
+# EOF
+#
+#   export PATH=$PATH:/Users/mathieu/development/flutter/bin:/Users/mathieu/Library/Android/sdk/platform-tools/
+#   alias postgres="/opt/homebrew/opt/postgresql@14/bin/postgres -D /opt/homebrew/var/postgresql@14"
+# fi
+
+
+
+
+if [[ -e /etc/arch-release && $USER = "mathieu" && $HOST = "desktop" ]]; then
   cat << "EOF"
   
- ███▄ ▄███▓ ▄▄▄     ▄▄▄█████▓ ██░ ██  ██▓▓█████  █    ██ 
-▓██▒▀█▀ ██▒▒████▄   ▓  ██▒ ▓▒▓██░ ██▒▓██▒▓█   ▀  ██  ▓██▒
-▓██    ▓██░▒██  ▀█▄ ▒ ▓██░ ▒░▒██▀▀██░▒██▒▒███   ▓██  ▒██░
-▒██    ▒██ ░██▄▄▄▄██░ ▓██▓ ░ ░▓█ ░██ ░██░▒▓█  ▄ ▓▓█  ░██░
-▒██▒   ░██▒ ▓█   ▓██▒ ▒██▒ ░ ░▓█▒░██▓░██░░▒████▒▒▒█████▓ 
-░ ▒░   ░  ░ ▒▒   ▓▒█░ ▒ ░░    ▒ ░░▒░▒░▓  ░░ ▒░ ░░▒▓▒ ▒ ▒ 
-░  ░      ░  ▒   ▒▒ ░   ░     ▒ ░▒░ ░ ▒ ░ ░ ░  ░░░▒░ ░ ░ 
-░      ░     ░   ▒    ░       ░  ░░ ░ ▒ ░   ░    ░░░ ░ ░ 
-       ░         ░  ░         ░  ░  ░ ░     ░  ░   ░     
-                                                         
+ ███▄ ▄███▓ ▄▄▄     ▄▄▄█████▓ ██░ ██  ██▓▓█████  █    ██     ▄▄▄▄   ▄▄▄█████▓ █     █░
+▓██▒▀█▀ ██▒▒████▄   ▓  ██▒ ▓▒▓██░ ██▒▓██▒▓█   ▀  ██  ▓██▒   ▓█████▄ ▓  ██▒ ▓▒▓█░ █ ░█░
+▓██    ▓██░▒██  ▀█▄ ▒ ▓██░ ▒░▒██▀▀██░▒██▒▒███   ▓██  ▒██░   ▒██▒ ▄██▒ ▓██░ ▒░▒█░ █ ░█ 
+▒██    ▒██ ░██▄▄▄▄██░ ▓██▓ ░ ░▓█ ░██ ░██░▒▓█  ▄ ▓▓█  ░██░   ▒██░█▀  ░ ▓██▓ ░ ░█░ █ ░█ 
+▒██▒   ░██▒ ▓█   ▓██▒ ▒██▒ ░ ░▓█▒░██▓░██░░▒████▒▒▒█████▓    ░▓█  ▀█▓  ▒██▒ ░ ░░██▒██▓ 
+░ ▒░   ░  ░ ▒▒   ▓▒█░ ▒ ░░    ▒ ░░▒░▒░▓  ░░ ▒░ ░░▒▓▒ ▒ ▒    ░▒▓███▀▒  ▒ ░░   ░ ▓░▒ ▒  
+░  ░      ░  ▒   ▒▒ ░   ░     ▒ ░▒░ ░ ▒ ░ ░ ░  ░░░▒░ ░ ░    ▒░▒   ░     ░      ▒ ░ ░  
+░      ░     ░   ▒    ░       ░  ░░ ░ ▒ ░   ░    ░░░ ░ ░     ░    ░   ░        ░   ░  
+       ░         ░  ░         ░  ░  ░ ░     ░  ░   ░         ░                   ░    
+                                                                  ░                   
 EOF
 
-  export PATH=$PATH:/Users/mathieu/development/flutter/bin:/Users/mathieu/Library/Android/sdk/platform-tools/
-  alias postgres="/opt/homebrew/opt/postgresql@14/bin/postgres -D /opt/homebrew/var/postgresql@14"
+export PATH="/home/mathieu/.local/bin:/home/mathieu/dev/flutter/bin:/home/mathieu/dev/bin:$PATH"
+
 fi
+

@@ -56,6 +56,7 @@ fi
 #
 # xinput disable 16
 # xrandr --output eDP1 --off --output HDMI1 --primary --auto
+setxkbmap -layout us -variant intl
 xset r rate 400 50
 exec i3
 # xrandr --output eDP1 --off --output  HDMI1 --primary --auto

@@ -702,8 +702,8 @@ keyboards_UserCustom_dct = {
     # Valid types to map device to: Apple, Windows, IBM, Chromebook (case sensitive)
     # Example:
     'Corne Keyboard': 'Apple',
-    # 'HHKB_Hybrid_1 Keyboard': 'Apple',
-    # 'PFU Limited HHKB-Hybrid Keyboard': 'Apple',
+    'HHKB_Hybrid_1 Keyboard': 'Apple',
+    'PFU Limited HHKB-Hybrid Keyboard': 'Apple',
     'ZMK Project Corne Keyboard': 'Apple'
 }
 
@@ -1231,8 +1231,8 @@ def is_valid_command(command):
 # Result will be None if DE is not in list OR if 'kdialog' not available.
 # kdialog_cmd = shutil.which('kdialog') if DESKTOP_ENV.casefold() in ['kde', 'lxqt'] else None
 # DISABLING KDIALOG BECAUSE IT KIND OF SUCKS QUITE A BIT COMPARED TO ZENITY/QARMA
+# kdialog_cmd = shutil.which('kdialog') if DESKTOP_ENV.casefold() in ['kdialog_is_lame'] else None
 kdialog_cmd = None
-kdialog_cmd = shutil.which('kdialog') if DESKTOP_ENV.casefold() in ['kdialog_is_lame'] else None
 
 
 zenity_is_qarma = False
