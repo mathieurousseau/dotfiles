@@ -10,21 +10,24 @@ return {
       elixir.setup {
         nextls = {
           enable = false,
-          init_options = {
-            mix_env = "test"
-          }
+          -- init_options = {
+          -- mix_env = "test"
+          -- }
         },
         elixirls = {
+          -- tag = "v0.26.4",
+          branch = "master",
           enable = true,
+          -- },
           settings = elixirls.settings {
             dialyzerEnabled = true,
             enableTestLenses = false,
           },
-          on_attach = function(client, bufnr)
-            vim.keymap.set("n", "<space>fp", ":ElixirFromPipe<cr>", { buffer = true, noremap = true })
-            vim.keymap.set("n", "<space>tp", ":ElixirToPipe<cr>", { buffer = true, noremap = true })
-            vim.keymap.set("v", "<space>em", ":ElixirExpandMacro<cr>", { buffer = true, noremap = true })
-          end,
+          --   on_attach = function(client, bufnr)
+          --     vim.keymap.set("n", "<space>fp", ":ElixirFromPipe<cr>", { buffer = true, noremap = true })
+          --     vim.keymap.set("n", "<space>tp", ":ElixirToPipe<cr>", { buffer = true, noremap = true })
+          --     vim.keymap.set("v", "<space>em", ":ElixirExpandMacro<cr>", { buffer = true, noremap = true })
+          --   end,
         },
         projectionist = {
           enable = false

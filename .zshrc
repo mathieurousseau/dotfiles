@@ -153,7 +153,7 @@ VISUAL='nvim'
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 export DIRENV_LOG_FORMAT=""
 if [ -f /etc/arch-release ]; then
-  . /opt/asdf-vm/asdf.sh
+  export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 else
   export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 fi
@@ -171,6 +171,8 @@ alias icat="kitten icat"
 
 alias clean_staging_repo='git branch  | grep -v staging | xargs git branch -D'
 alias repo_clean="git branch --merged develop | grep -v develop | xargs  git branch --delete"
+
+alias c_nvim="NVIM_APPNAME=c_nvim nvim"
 
 export PATH=$PATH:~/.bin
 
