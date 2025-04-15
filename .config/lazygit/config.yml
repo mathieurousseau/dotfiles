@@ -1,9 +1,8 @@
 git:
   paging:
     colorArg: never
-    # pager: ydiff -p cat -s --wrap --width={{columnWidth}}
-    # pager: difft --color=always
-    externalDiffCommand: difft --color=always --display=side-by-side-show-both --syntax-highlight=off
+    pager: ydiff -p cat -s --wrap --width={{columnWidth}}
+    # externalDiffCommand: difft --display=side-by-side-show-both --syntax-highlight=off
 
 # quitOnTopLevelReturn: false
 gui:

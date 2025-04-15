@@ -113,6 +113,7 @@ return {
       vim.keymap.set('n', '<leader>sf', require('telescope').extensions.flutter.commands,
         { noremap = true, desc = 'Flutter' })
       vim.keymap.set('n', '<leader>sm', "<cmd>Telescope notify<CR>", { desc = '[S]earch [M]essages' })
+      vim.keymap.set('n', '<leader>sg', "<cmd>Telescope git_status<CR>", { desc = '[S]earch [G]it status' })
 
 
       -- Slightly advanced example of overriding default behavior and theme
