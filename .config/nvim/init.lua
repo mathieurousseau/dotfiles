@@ -57,6 +57,9 @@ vim.opt.foldlevelstart = 99
 vim.opt.foldenable = true
 vim.opt.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 
+-- Minimal number of screen lines to keep above and below the cursor.
+vim.opt.scrolloff = 5
+
 -- Spellcheck
 vim.opt.spell = true
 vim.opt.spelllang = "en_us"
@@ -129,8 +132,27 @@ require('lazy').setup({
   { "chentoast/marks.nvim",   event = "VeryLazy" },
 
 
-
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
+  { "github/copilot.vim" },
   { import = 'custom.plugins' }
 })
+
+-- require('java').setup()
+
+-- require('lspconfig').jdtls.setup({
+--   settings = {
+--     java = {
+--       configuration = {
+--         runtimes = {
+--           {
+--             name = "JavaSE-22",
+--             -- path = "/Users/Mathieu.Rousseau/bin/jdk-21.0.6.jdk",
+--             path = "/Users/Mathieu.Rousseau/bin/jdk-21.0.6.jdk/Contents/Home/",
+--             default = true,
+--           }
+--         }
+--       }
+--     }
+--   }
+-- })

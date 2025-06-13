@@ -242,7 +242,16 @@ alias k_staging='kubectx scoremedia-staging && k9s'
 alias k_ps='kubectx scoremedia-ps && k9s'
 alias k_prod='kubectx scoremedia-production && k9s'
 
+alias g_check='./gradlew spotlessCheck'
+alias g_apply='./gradlew spotlessApply'
+alias g_run='./gradlew quarkusDev'
+alias g_test='./gradlew test'
+
 export PATH=$PATH:/opt/homebrew/opt/mysql-client/bin
+# export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+export PATH="/Users/Mathieu.Rousseau/bin/jdk-21.0.6.jdk/Contents/Home/bin/:$PATH"
+export PATH="$PATH:/Applications/IntelliJ IDEA CE.app/Contents/MacOS"
+export PATH="$PATH:/opt/homebrew/opt/libpq/bin"
 
 fi
 

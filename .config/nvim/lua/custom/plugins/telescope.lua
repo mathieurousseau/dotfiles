@@ -52,7 +52,7 @@ return {
       local lga_actions = require("telescope-live-grep-args.actions")
 
       require('telescope').setup {
-        defaults = { path_display = { "truncate" } },
+        defaults = { path_display = { "shorten" } },
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --

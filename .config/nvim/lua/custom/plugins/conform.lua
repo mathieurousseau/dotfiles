@@ -7,7 +7,7 @@ return {
       {
         '<leader>cf',
         function()
-          require('conform').format { async = true, lsp_format = 'fallback' }
+          require('conform').format()
         end,
         mode = '',
         desc = '[F]ormat buffer',
@@ -34,6 +34,7 @@ return {
       end,
       formatters_by_ft = {
         lua = { 'lua_ls' },
+        java = { 'google-java-format' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --

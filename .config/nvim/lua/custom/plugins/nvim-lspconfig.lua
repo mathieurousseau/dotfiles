@@ -1,16 +1,23 @@
+-- require('java').setup()
 return {
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
     dependencies = {
+      "mason-org/mason-registry",
       -- Automatically install LSPs and related tools to stdpath for Neovim
       {
-        'williamboman/mason.nvim',
+        "mason-org/mason.nvim",
+        -- version = "1.11.0",
         config = true
         -- NOTE: Must be loaded before dependants
       },
-      'williamboman/mason-lspconfig.nvim',
+      { "mason-org/mason-lspconfig.nvim",
+        -- version = "1.32.0"
+      },
       'WhoIsSethDaniel/mason-tool-installer.nvim',
+      'nvim-java/nvim-java',
+
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
@@ -171,6 +178,22 @@ return {
         --
         -- dartls = {},
         html = {},
+        -- jdtls = {},
+        --   settings = {
+        --     java = {
+        --       configuration = {
+        --         runtimes = {
+        --           {
+        --             name = "JavaSE-21",
+        --             path = "/Users/Mathieu.Rousseau/bin/jdk-21.0.6.jdk/Contents/Home",
+        --             default = true,
+        --           }
+        --         }
+        --       }
+        --     }
+        --   }
+        -- },
+        buf_ls = {},
         -- elixirls = {},
         lua_ls = {
           -- cmd = {...},
@@ -188,6 +211,7 @@ return {
         },
       }
 
+
       -- Ensure the servers and tools above are installed
       --  To check the current status of installed tools and/or manually install
       --  other tools, you can run
@@ -199,9 +223,9 @@ return {
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
-      -- vim.list_extend(ensure_installed, {
-      --   'stylua', -- Used to format Lua code
-      -- })
+      vim.list_extend(ensure_installed, {
+        'google-java-format', -- Used to format Java code
+      })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
@@ -216,8 +240,34 @@ return {
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
             require('lspconfig')[server_name].setup(server)
           end,
+          jdtls = function()
+            require('java').setup {
+              -- Your custom jdtls settings goes here
+            }
+
+            require('lspconfig').jdtls.setup {
+              -- Your custom nvim-java configuration goes here
+            }
+          end,
         },
       }
+      -- require('java').setup()
+      -- require('lspconfig').jdtls.setup({
+      --   settings = {
+      --     java = {
+      --       configuration = {
+      --         runtimes = {
+      --           {
+      --             name = "JavaSE-22",
+      --             -- path = "/Users/Mathieu.Rousseau/bin/jdk-21.0.6.jdk",
+      --             path = "/Users/Mathieu.Rousseau/bin/jdk-21.0.6.jdk/Contents/Home/",
+      --             default = true,
+      --           }
+      --         }
+      --       }
+      --     }
+      --   }
+      -- })
     end,
   }
 }
