@@ -50,7 +50,7 @@ focus_follows_mouse no
 
 # move tiling windows via drag & drop by left-clicking into the title bar,
 # or left-clicking anywhere into the window while holding the floating modifier.
-tiling_drag modifier titlebar
+# tiling_drag modifier titlebar
 
 # start a terminal
 bindsym $mod+Return exec kitty
@@ -126,6 +126,7 @@ set $wsT "T"
 set $wsG "G"
 set $wsM "M"
 set $wsP "P"
+set $wsO "O"
 set $wsS "S"
 
 # switch to workspace
@@ -136,6 +137,7 @@ bindsym $mod+T workspace $wsT
 bindsym $mod+G workspace $wsG
 bindsym $mod+M workspace $wsM
 bindsym $mod+P workspace $wsP
+bindsym $mod+O workspace $wsO
 bindsym $mod+S workspace $wsS
 
 # move focused container to workspace
@@ -145,6 +147,7 @@ bindsym $mod+Shift+D move container to workspace $wsD
 bindsym $mod+Shift+T move container to workspace $wsT
 bindsym $mod+Shift+G move container to workspace $wsG
 bindsym $mod+Shift+M move container to workspace $wsM
+bindsym $mod+Shift+O move container to workspace $wsO
 bindsym $mod+Shift+P move container to workspace $wsP
 bindsym $mod+Shift+S move container to workspace $wsS
 
@@ -158,6 +161,7 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 for_window [class="kitty"] border pixel 3
 
 gaps inner 10
+default_border pixel 10
 
 exec_always feh --bg-scale ~/Documents/wallpapers/kanagawa.jpeg
 set $base05 #dcd7ba
@@ -218,17 +222,17 @@ bar {
         status_command i3status
 
         colors {
-        background $base00
-        separator  $base01
-        statusline $base04
+            background $base00
+            separator  $base01
+            statusline $base04
 
-        # State             Border  BG      Text
-        focused_workspace   $base05 $base0D $base00
-        active_workspace    $base05 $base03 $base00
-        inactive_workspace  $base03 $base01 $base05
-        urgent_workspace    $base08 $base08 $base00
-        binding_mode        $base00 $base0A $base00
-    }
+            # State             Border  BG      Text
+            focused_workspace   $base05 $base0D $base00
+            active_workspace    $base05 $base03 $base00
+            inactive_workspace  $base03 $base01 $base05
+            urgent_workspace    $base08 $base08 $base00
+            binding_mode        $base00 $base0A $base00
+        }
 }
 
 # Basic color configuration using the Base16 variables for windows and borders.
