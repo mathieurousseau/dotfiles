@@ -64,6 +64,8 @@ vim.opt.scrolloff = 5
 vim.opt.spell = true
 vim.opt.spelllang = "en_us"
 
+
+vim.opt.splitright = true
 -------------
 -- KEYMAPS --
 -------------

@@ -1,4 +1,3 @@
--- require('java').setup()
 return {
   {
     -- Main LSP Configuration
@@ -16,7 +15,7 @@ return {
         -- version = "1.32.0"
       },
       'WhoIsSethDaniel/mason-tool-installer.nvim',
-      'nvim-java/nvim-java',
+      -- 'nvim-java/nvim-java',
 
 
       -- Useful status updates for LSP.
@@ -76,6 +75,9 @@ return {
 
           -- Find references for the word under your cursor.
           map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+          -- map('gr', require('telescope.builtin').lsp_references({show_line=false}), '[G]oto [R]eferences')
+          -- map('gr', vim.cmd [[:Telescope lsp_references show_line=false]], '[G]oto [R]eferences')
+
 
           -- Jump to the implementation of the word under your cursor.
           --  Useful when your language has ways of declaring types without an actual implementation.
@@ -178,21 +180,21 @@ return {
         --
         -- dartls = {},
         html = {},
-        -- jdtls = {},
-        --   settings = {
-        --     java = {
-        --       configuration = {
-        --         runtimes = {
-        --           {
-        --             name = "JavaSE-21",
-        --             path = "/Users/Mathieu.Rousseau/bin/jdk-21.0.6.jdk/Contents/Home",
-        --             default = true,
-        --           }
-        --         }
-        --       }
-        --     }
-        --   }
-        -- },
+        jdtls = {
+          settings = {
+            java = {
+              configuration = {
+                runtimes = {
+                  {
+                    name = "JavaSE-21",
+                    path = "/Users/Mathieu.Rousseau/bin/jdk-21.0.6.jdk/Contents/Home",
+                    default = true,
+                  }
+                }
+              }
+            }
+          }
+        },
         buf_ls = {},
         -- elixirls = {},
         lua_ls = {
@@ -241,33 +243,30 @@ return {
             require('lspconfig')[server_name].setup(server)
           end,
           jdtls = function()
-            require('java').setup {
-              -- Your custom jdtls settings goes here
-            }
+            return true -- avoid duplicate servers
+          end
 
-            require('lspconfig').jdtls.setup {
-              -- Your custom nvim-java configuration goes here
-            }
-          end,
+          -- require('java').setup {}
+
+          -- require('lspconfig').jdtls.setup {
+          --   -- Your custom nvim-java configuration goes here
+          --   settings = {
+          --     java = {
+          --       configuration = {
+          --         runtimes = {
+          --           {
+          --             name = "JavaSE-21",
+          --             path = "/Users/Mathieu.Rousseau/bin/jdk-21.0.6.jdk/Contents/Home",
+          --             default = true,
+          --           },
+          --         },
+          --       },
+          --     },
+          --   },
+          -- }
+          -- end,
         },
       }
-      -- require('java').setup()
-      -- require('lspconfig').jdtls.setup({
-      --   settings = {
-      --     java = {
-      --       configuration = {
-      --         runtimes = {
-      --           {
-      --             name = "JavaSE-22",
-      --             -- path = "/Users/Mathieu.Rousseau/bin/jdk-21.0.6.jdk",
-      --             path = "/Users/Mathieu.Rousseau/bin/jdk-21.0.6.jdk/Contents/Home/",
-      --             default = true,
-      --           }
-      --         }
-      --       }
-      --     }
-      --   }
-      -- })
     end,
   }
 }
