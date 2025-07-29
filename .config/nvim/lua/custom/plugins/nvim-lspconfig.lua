@@ -246,25 +246,6 @@ return {
             return true -- avoid duplicate servers
           end
 
-          -- require('java').setup {}
-
-          -- require('lspconfig').jdtls.setup {
-          --   -- Your custom nvim-java configuration goes here
-          --   settings = {
-          --     java = {
-          --       configuration = {
-          --         runtimes = {
-          --           {
-          --             name = "JavaSE-21",
-          --             path = "/Users/Mathieu.Rousseau/bin/jdk-21.0.6.jdk/Contents/Home",
-          --             default = true,
-          --           },
-          --         },
-          --       },
-          --     },
-          --   },
-          -- }
-          -- end,
         },
       }
     end,
