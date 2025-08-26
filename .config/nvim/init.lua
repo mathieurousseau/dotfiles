@@ -61,11 +61,14 @@ vim.opt.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 vim.opt.scrolloff = 5
 
 -- Spellcheck
-vim.opt.spell = true
+vim.opt.spell = false
 vim.opt.spelllang = "en_us"
 
 
 vim.opt.splitright = true
+
+-- stack buffer jump -> it will jump to the last buffer you were in even if you close it
+vim.opt.jumpoptions = 'stack'
 -------------
 -- KEYMAPS --
 -------------

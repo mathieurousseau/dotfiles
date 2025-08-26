@@ -173,6 +173,7 @@ alias clean_staging_repo='git branch  | grep -v staging | xargs git branch -D'
 alias repo_clean="git branch --merged develop | grep -v develop | xargs  git branch --delete"
 
 alias c_nvim="NVIM_APPNAME=c_nvim nvim"
+alias lvim="NVIM_APPNAME=lazyvim nvim"
 
 export PATH=$PATH:~/.bin
 
@@ -249,6 +250,7 @@ alias g_test='./gradlew test'
 
 export PATH=$PATH:/opt/homebrew/opt/mysql-client/bin
 # export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+export JAVA_HOME="/Users/Mathieu.Rousseau/bin/jdk-21.0.6.jdk/Contents/Home"
 export PATH="/Users/Mathieu.Rousseau/bin/jdk-21.0.6.jdk/Contents/Home/bin/:$PATH"
 export PATH="$PATH:/Applications/IntelliJ IDEA CE.app/Contents/MacOS"
 export PATH="$PATH:/opt/homebrew/opt/libpq/bin"
