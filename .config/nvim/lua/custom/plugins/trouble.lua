@@ -1,16 +1,39 @@
 return {
-{
+  {
     'folke/trouble.nvim',
-    opts = {}, -- for default options, refer to the configuration section for custom setup.
+    opts = {
+      modes = {
+        my_diagnostics = {
+          mode = 'diagnostics',
+          filter = {
+            ['not'] = { severity = vim.diagnostic.severity.INFO },
+          },
+        },
+        info_diagnostics = {
+          mode = 'diagnostics',
+          filter = function(items)
+            return vim.tbl_filter(function(item)
+              return item.severity == vim.diagnostic.severity.INFO
+            end, items)
+          end,
+        },
+      },
+    }, -- for default options, refer to the configuration section for custom setup.
     cmd = 'Trouble',
     keys = {
       {
         '<leader>xx',
-        '<cmd>Trouble diagnostics toggle<cr>',
+        '<cmd>Trouble my_diagnostics toggle<cr>',
         desc = 'Diagnostics (Trouble)',
       },
       {
-        '<leader>xX',
+        '<leader>xi',
+        '<cmd>Trouble info_diagnostics toggle<cr>',
+        desc = 'Diagnostics INFO (Trouble)',
+      },
+
+      {
+        '<leader>xb',
         '<cmd>Trouble diagnostics toggle filter.buf=0<cr>',
         desc = 'Buffer Diagnostics (Trouble)',
       },
@@ -36,4 +59,4 @@ return {
       },
     },
   }
-  }
+}

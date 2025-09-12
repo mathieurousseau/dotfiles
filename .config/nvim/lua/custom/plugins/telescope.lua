@@ -56,8 +56,8 @@ return {
           path_display = {
             -- "truncate", shorten = 5
             -- "truncate",
-            "smart",
-            -- "shorten"
+            -- "smart",
+            "shorten"
           },
           layout_strategy = 'vertical',
           layout_config = {
