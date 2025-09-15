@@ -17,6 +17,14 @@ return {
             end, items)
           end,
         },
+        error_diagnostics = {
+          mode = 'diagnostics',
+          filter = function(items)
+            return vim.tbl_filter(function(item)
+              return item.severity == vim.diagnostic.severity.ERROR
+            end, items)
+          end,
+        }
       },
     }, -- for default options, refer to the configuration section for custom setup.
     cmd = 'Trouble',
@@ -24,6 +32,11 @@ return {
       {
         '<leader>xx',
         '<cmd>Trouble my_diagnostics toggle<cr>',
+        desc = 'Diagnostics (Trouble)',
+      },
+      {
+        '<leader>xe',
+        '<cmd>Trouble error_diagnostics toggle<cr>',
         desc = 'Diagnostics (Trouble)',
       },
       {
