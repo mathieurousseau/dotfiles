@@ -1,7 +1,8 @@
 return {
   -- Mode indicator -> change line color with mode color
   'mathieurousseau/modicator.nvim',
-  -- dir = '~/Projects/modicator.nvim/',
+  -- 'mawkler/modicator.nvim',
+  -- dir = '~/Projects/mathieu/modicator.nvim/',
 
   config = function()
     require('modicator').setup({

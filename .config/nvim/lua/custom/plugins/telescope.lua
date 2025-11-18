@@ -57,7 +57,7 @@ return {
             -- "truncate", shorten = 5
             -- "truncate",
             -- "smart",
-            "shorten"
+            -- "shorten"
           },
           layout_strategy = 'vertical',
           layout_config = {

@@ -69,6 +69,13 @@ vim.opt.splitright = true
 
 -- stack buffer jump -> it will jump to the last buffer you were in even if you close it
 vim.opt.jumpoptions = 'stack'
+
+-- indentation
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
+vim.opt.softtabstop = 2
+
 -------------
 -- KEYMAPS --
 -------------
@@ -125,7 +132,7 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Configure Lazy, onliner plugins will be here, others in the customs/plugins/ folder
 require('lazy').setup({
-  'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  -- 'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   "tpope/vim-fugitive",
   "tpope/vim-rhubarb",
   "tpope/vim-abolish",
@@ -142,22 +149,3 @@ require('lazy').setup({
   { "github/copilot.vim" },
   { import = 'custom.plugins' }
 })
-
--- require('java').setup()
-
--- require('lspconfig').jdtls.setup({
---   settings = {
---     java = {
---       configuration = {
---         runtimes = {
---           {
---             name = "JavaSE-22",
---             -- path = "/Users/Mathieu.Rousseau/bin/jdk-21.0.6.jdk",
---             path = "/Users/Mathieu.Rousseau/bin/jdk-21.0.6.jdk/Contents/Home/",
---             default = true,
---           }
---         }
---       }
---     }
---   }
--- })

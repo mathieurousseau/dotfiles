@@ -7,7 +7,11 @@ return {
       local cmd = { vim.fn.exepath("jdtls") }
       -- if LazyVim.has("mason.nvim") then
       local mason_registry = require("mason-registry")
-      local lombok_jar = mason_registry.get_package("jdtls"):get_install_path() .. "/lombok.jar"
+      -- local lombok_jar = mason_registry.get_package("jdtls"):get_install_path() .. "/lombok.jar"
+      -- local lombok_jar = vim.fn.exepath("jdtls") .. "/lombok.jar"
+      vim.print("MASON: " .. vim.env.MASON .. "/share/jdtls/lombok.jar")
+      local lombok_jar = vim.env.MASON .. "/share/jdtls/lombok.jar"
+      -- local lombok_jar = vim.fn.globalpath("$MASON/share/jdtls/lombok.jar")
 
       table.insert(cmd, string.format("--jvm-arg=-javaagent:%s", lombok_jar))
       -- end
