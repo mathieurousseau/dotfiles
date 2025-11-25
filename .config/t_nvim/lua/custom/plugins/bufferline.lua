@@ -16,7 +16,7 @@ return {
     { "]b",         "<cmd>BufferLineCycleNext<cr>",            desc = "Next Buffer" },
     { "[B",         "<cmd>BufferLineMovePrev<cr>",             desc = "Move buffer prev" },
     { "]B",         "<cmd>BufferLineMoveNext<cr>",             desc = "Move buffer next" },
-    -- { "<leader>bd", "<cmd>bp|sp|bn|bd<cr>",                    desc = "Delete Buffer" },
+    { "<leader>bd", "<cmd>bp|sp|bn|bd<cr>",                    desc = "Delete Buffer" },
   },
   config = function()
     local bufferline = require("bufferline")
