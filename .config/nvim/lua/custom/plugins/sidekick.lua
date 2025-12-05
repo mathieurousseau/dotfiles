@@ -29,8 +29,8 @@ return {
     },
     {
       "<leader>aa",
-      function() require("sidekick.cli").toggle() end,
-      desc = "Sidekick Toggle CLI",
+      function() require("sidekick.nes").update() end,
+      desc = "Sidekick next NES",
     },
     {
       "<leader>as",

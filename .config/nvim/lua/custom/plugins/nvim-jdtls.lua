@@ -159,7 +159,8 @@ return {
                 { "<leader>cxc", require("jdtls").extract_constant,     desc = "Extract Constant" },
                 { "<leader>cgs", require("jdtls").super_implementation, desc = "Goto Super" },
                 { "<leader>cgS", require("jdtls.tests").goto_subjects,  desc = "Goto Subjects" },
-                { "<leader>co",  require("jdtls").organize_imports,     desc = "Organize Imports" },
+                { "<leader>co", require("jdtls").organize_imports, desc = "Organize Imports" }
+                ,
               },
             })
             wk.add({

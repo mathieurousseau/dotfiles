@@ -46,7 +46,8 @@ return {
     { "<leader>,",       function() Snacks.picker.buffers() end,                                 desc = "Buffers" },
     { "<leader>/",       function() Snacks.picker.grep() end,                                    desc = "Grep" },
     { "<leader>:",       function() Snacks.picker.command_history() end,                         desc = "Command History" },
-    { "<leader>n",       function() Snacks.picker.notifications() end,                           desc = "Notification History" },
+    { "<leader>sn",      function() Snacks.picker.notifications() end,                           desc = "Notification History" },
+    { "<leader>nh",      function() Snacks.notifier.show_history() end,                          desc = "Notification History" },
     { "<leader>e",       function() Snacks.explorer() end,                                       desc = "File Explorer" },
     -- find
     -- { "<leader>fb",      function() Snacks.picker.buffers() end,                                 desc = "Buffers" },
@@ -71,7 +72,6 @@ return {
     { '<leader>s"',      function() Snacks.picker.registers() end,                               desc = "Registers" },
     { '<leader>s/',      function() Snacks.picker.search_history() end,                          desc = "Search History" },
     { "<leader>sa",      function() Snacks.picker.autocmds() end,                                desc = "Autocmds" },
-    { "<leader>sb",      function() Snacks.picker.lines() end,                                   desc = "Buffer Lines" },
     { "<leader>sc",      function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
     -- { "<leader>sc",      function() Snacks.picker.command_history() end,                         desc = "Command History" },
     { "<leader>sC",      function() Snacks.picker.commands() end,                                desc = "Commands" },
@@ -109,7 +109,6 @@ return {
     -- { "<leader>Z",       function() Snacks.zen.zoom() end,                                       desc = "Toggle Zoom" },
     { "<leader>.",       function() Snacks.scratch() end,                                        desc = "Toggle Scratch Buffer" },
     { "<leader>S",       function() Snacks.scratch.select() end,                                 desc = "Select Scratch Buffer" },
-    { "<leader>n",       function() Snacks.notifier.show_history() end,                          desc = "Notification History" },
     { "<leader>bd",      function() Snacks.bufdelete() end,                                      desc = "Delete Buffer" },
     -- { "<leader>cR",      function() Snacks.rename.rename_file() end,                             desc = "Rename File" },
     { "<leader>gB",      function() Snacks.gitbrowse() end,                                      desc = "Git Browse",                 mode = { "n", "v" } },
@@ -117,7 +116,6 @@ return {
     { "<leader>un",      function() Snacks.notifier.hide() end,                                  desc = "Dismiss All Notifications" },
     { "<c-/>",           function() Snacks.terminal(nil, { count = 1 }) end,                     desc = "Term 1",                     mode = { "n", "t" } },
     { "<c-.>",           function() Snacks.terminal(nil, { count = 2 }) end,                     desc = "Term 2",                     mode = { "n", "t" } },
-    -- { "<c-,>",           function() Snacks.terminal(nil, { count = 3 }) end,                     desc = "Term 3",                     mode = { "n", "t" } },
     { "]]",              function() Snacks.words.jump(vim.v.count1) end,                         desc = "Next Reference",             mode = { "n", "t" } },
     { "[[",              function() Snacks.words.jump(-vim.v.count1) end,                        desc = "Prev Reference",             mode = { "n", "t" } },
     {
