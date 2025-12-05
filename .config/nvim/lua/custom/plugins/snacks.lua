@@ -37,7 +37,7 @@ return {
       end,
 
     },
-    statuscolumn = { enabled = true },
+    -- statuscolumn = { enabled = true },
     words = { enabled = true },
   },
   keys = {

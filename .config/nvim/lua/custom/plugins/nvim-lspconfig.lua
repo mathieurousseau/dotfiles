@@ -179,7 +179,7 @@ return {
         -- ts_ls = {},
         --
         -- dartls = {},
-        ["copilot-language-server"] = {},
+        -- ["copilot-language-server"] = {},
         html = {},
         jdtls = {
           settings = {

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-__version__ = '20250407'
+__version__ = '20250823'
 ###############################################################################
 ############################   Welcome to Toshy!   ############################
 ###  
@@ -8,7 +8,7 @@ __version__ = '20250407'
 ###      (https://kinto.sh)
 ###  
 ###  All credit for the basis of this config goes to Ben Reaves. 
-###      (https://github.com/rbreaves/)
+###      (https://github.com/rbreaves/kinto/)
 ###  
 ###  Much assistance was provided by Josh Goebel, the developer of the
 ###  `xkeysnail` fork `keyszer`, which is now forked into `xwaykeyz` to
@@ -22,11 +22,12 @@ import os
 import sys
 import time
 import shutil
+import asyncio
 import inspect
 import subprocess
 
 from subprocess import DEVNULL
-from typing import Callable, List, Dict, Tuple, Union
+from typing import Any, Callable, Optional, Union, List, Dict, Tuple
 
 from xwaykeyz.config_api import *
 from xwaykeyz.lib.key_context import KeyContext
@@ -157,10 +158,10 @@ current_folder_path = os.path.dirname(os.path.abspath(config_globals["__config__
 sys.path.insert(0, current_folder_path)
 
 # Local imports after path has been set
-from lib.env_context import EnvironmentInfo
-from lib.machine_context import get_machine_id_hash
-from lib.notification_manager import NotificationManager
-from lib.settings_class import Settings
+from toshy_common.env_context import EnvironmentInfo
+from toshy_common.machine_context import get_machine_id_hash
+from toshy_common.notification_manager import NotificationManager
+from toshy_common.settings_class import Settings
 
 assets_path         = os.path.join(current_folder_path, 'assets')
 icon_file_active    = os.path.join(assets_path, "toshy_app_icon_rainbow.svg")
@@ -440,7 +441,7 @@ terminals = [
     "MateTerminal",
     "org.codeberg.dnkl.foot.desktop",
     "org.gnome.Console",
-    # "org.gnome.Ptyxis.*",
+    # "org.gnome.Ptyxis.*",             # Replaced by double-wildcard entry
     "org.gnome.Terminal",
     "org.kde.konsole",
     "org.kde.yakuake",
@@ -702,9 +703,11 @@ keyboards_UserCustom_dct = {
     # Valid types to map device to: Apple, Windows, IBM, Chromebook (case sensitive)
     # Example:
     'Corne Keyboard': 'Apple',
+    'Red-Corne Keyboard': 'Apple',
     'HHKB_Hybrid_1 Keyboard': 'Apple',
     'PFU Limited HHKB-Hybrid Keyboard': 'Apple',
-    'ZMK Project Corne Keyboard': 'Apple'
+    'ZMK Project Corne Keyboard': 'Apple',
+    'ZMK Project Red-Corne Keyboard': 'Apple'
 }
 
 ###  SLICE_MARK_END: kbtype_override  ###  EDITS OUTSIDE THESE MARKS WILL BE LOST ON UPGRADE
@@ -733,11 +736,13 @@ keyboards_Windows = [
 ]
 keyboards_Apple = [
     # Add specific Apple/Mac keyboard device names to this list
-    'Mitsumi Electric Apple Extended USB Keyboard',
+    'HP TouchPad Wireless Keyboard',    # Missing some keys, but Apple type probably best default
     'Magic Keyboard with Numeric Keypad',
     'Magic Keyboard',
+    'Mitsumi Electric Apple Extended USB Keyboard',
     'MX Keys Mac Keyboard',
-    'HP TouchPad Wireless Keyboard',    # Missing some keys, but Apple type probably best default
+    'Griffin Technology, Inc. iMate, USB To ADB Adaptor',
+    '.*USB to ADB Adapt.*'  # ADB device is pretty much guaranteed to be an Apple (or NeXT) keyboard
 ]
 
 kbtype_lists = {
@@ -815,13 +820,13 @@ kbtype_cache_dct = {}
 def getKBtype():
     """
     ### Get the keyboard type string for the current device
-    
+
     #### Valid Types
-    
+
     - IBM | Chromebook | Windows | Apple
-    
+
     #### Hierarchy of validations:
-    
+
     - Check if a forced override of keyboard type is applied by user preference.
     - Check cache dictionary for device name stored from previous run of function.
     - Check if the device name is in the keyboards_UserCustom_dct dictionary.
@@ -897,25 +902,25 @@ def getKBtype():
 def isDoubleTap(dt_combo):
     """
     VERY EXPERIMENTAL!!!
-    
+
     Simplistic detection of double-tap of a key or combo.
-    
+
     BLOCKS single-tap function, if used with a single key as the input, but the
     'normal' (non-modifier) key of a combo will still be usable when used by 
     itself as a non-double-tapped key press.
-    
+
     Example: 'RC-CapsLock' will respond when "Cmd" key (under Toshy remapping)
     is held and CapsLock key is double-tapped. Nothing will happen if 
     Cmd+CapsLock is pressed without double-tapping CapsLock key within the
     configured time interval. But the CapsLock key will still work by itself.
-    
+
     If double-tap input "combo" is just 'CapsLock', the functioning of a single-tap
     CapsLock key press will be BLOCKED. Nothing will happen unless the key is 
     double-tapped within the configured time interval.
-    
+
     Only cares about the 'real' key in a combo of Mods+key, like in the example
     above with 'RC-CapsLock'. 
-    
+
     The proper way to do this would be inside the keymapper, in the async event loop
     that deals with input/output functions. 
     """
@@ -1167,7 +1172,7 @@ def iEF2(combo_if_true, latch_or_combo_if_false,
     Formerly 'is_Enter_F2'
     Send a different combo for the Enter key based on the state of the _enter_is_F2 variable,
     or latch the variable to True or False to control the Enter key output on the next use.
-    
+
     Args:
         combo_if_true:              The combo to send if _enter_is_F2 is True.
         latch_or_combo_if_false:    The combo to send if _enter_is_F2 is False, or
@@ -1176,12 +1181,12 @@ def iEF2(combo_if_true, latch_or_combo_if_false,
                                     If False, _enter_is_F2 will be set to False if it is currently True.
         keep_value_if_false (opt.): If True, _enter_is_F2 will be kept False if it is currently False.
                                     If False, _enter_is_F2 will be set to True if it is currently False.
-    
+
     Returns:
         A function that, when called, returns the appropriate combo based on the current
         state of _enter_is_F2 and the provided parameters, and updates _enter_is_F2
         based on the provided parameters.
-    
+
     This enables a simulation of the Finder "Enter to rename" capability, allowing
     for complex control over the Enter key's behavior in various scenarios.
     """
@@ -1220,7 +1225,7 @@ def macro_tester():
                     ST(f"Keyboard type: '{KBTYPE}'"), C("Enter"),
                     ST("Next test should come out on ONE LINE!"), C("Enter"),
                     ST("Unicode and Shift Test: 🌹—€—\u2021—ÿ—\U00002021 12345 !@#$% |\\ !!!!!!"),
-                    C("Enter")
+                    C("Enter"), C("Enter"),
         ]
     return _macro_tester
 
@@ -1426,6 +1431,331 @@ def toggle_and_show_numlock_state(ctx: KeyContext):
 
 ###  SLICE_MARK_END: user_custom_functions  ###  EDITS OUTSIDE THESE MARKS WILL BE LOST ON UPGRADE
 ###################################################################################################
+
+
+
+###################################  MULTI-TAP  ####################################
+###                                                                              ###
+###                                                                              ###
+###    ███    ███ ██    ██ ██      ████████ ██       ████████  █████  ██████     ###
+###    ████  ████ ██    ██ ██         ██    ██          ██    ██   ██ ██   ██    ###
+###    ██ ████ ██ ██    ██ ██         ██    ██ █████    ██    ███████ ██████     ###
+###    ██  ██  ██ ██    ██ ██         ██    ██          ██    ██   ██ ██         ###
+###    ██      ██  ██████  ███████    ██    ██          ██    ██   ██ ██         ###
+###                                                                              ###
+###                                                                              ###
+####################################################################################
+# Functions to support proper asyncio time-based multi-tap actions, without
+# blocking the single-tap usage of the same combo (unless desired).
+# 
+# Until this EXPERIMENTAL feature moves into the keymapper, the API function
+# `multitap_config()` will need to be called from a section lower down, like
+# the "user_apps" editable slice, if user wants custom multi-tap timings.
+
+
+# Multi-tap configuration storage
+_MULTITAP_CONFIG = {
+    'tap_interval': 0.25,     # Default: 250ms between taps
+    'min_tap_delay': 0.07,    # Default: 70ms repeat protection
+}
+
+
+def get_output():
+    """Get the main keymapper's output instance"""
+    try:
+        # Access the transform module's _output at runtime
+        if 'xwaykeyz.transform' in sys.modules:
+            transform_module = sys.modules['xwaykeyz.transform']
+            if hasattr(transform_module, '_output'):
+                debug("## multitap: Using main keymapper's _output instance")
+                return transform_module._output
+    except Exception as e:
+        debug(f"## multitap: Error accessing output: {e}")
+    return None
+
+
+def process_multitap_command(command, ctx):
+    """Simplified recursive command processor based on handle_commands logic"""
+    debug(f"## multitap: Processing command: {type(command)}")
+
+    if callable(command):
+        # Handle functions like ST(), notify_context, etc.
+        cmd_param_cnt = len(inspect.signature(command).parameters)
+        debug(f"## multitap: Callable with {cmd_param_cnt} parameters")
+
+        if cmd_param_cnt == 0:
+            result = command()
+        else:
+            result = command(ctx)
+
+        debug(f"## multitap: Callable returned: {type(result)}")
+
+        # Recursively process the result
+        if result is not None:
+            process_multitap_command(result, ctx)
+
+    elif isinstance(command, list):
+        # Recursively process each item in the list
+        debug(f"## multitap: Processing list with {len(command)} items")
+        for i, item in enumerate(command):
+            debug(f"## multitap: Processing list item {i+1}: {type(item)}")
+            process_multitap_command(item, ctx)
+
+    else:
+        # Handle direct objects (Combo, Key, etc.)
+        output = get_output()
+        if output and hasattr(command, '__class__'):
+            class_name = command.__class__.__name__
+            debug(f"## multitap: Direct object class: {class_name}")
+
+            if 'Combo' in class_name:
+                output.send_combo(command)
+                debug(f"## multitap: Sent Combo object")
+            elif 'Key' in class_name:
+                output.send_key(command)
+                debug(f"## multitap: Sent Key object")
+            elif command is not None:
+                debug(f"## multitap: Unknown command type: {class_name}")
+        elif not output:
+            debug(f"## multitap: No output available for command: {type(command)}")
+        else:
+            debug(f"## multitap: Command has no __class__: {command}")
+
+
+# Per-combo state tracking using action tuple as key
+tap_states: Dict[tuple, Dict[str, Any]] = {}
+
+event_loop: Optional[asyncio.AbstractEventLoop] = None
+
+
+def get_loop() -> Optional[asyncio.AbstractEventLoop]:
+    global event_loop
+    if event_loop is None or event_loop.is_closed():
+        try:
+            event_loop = asyncio.get_running_loop()
+        except RuntimeError:
+            event_loop = None
+    return event_loop
+
+
+def multitap_config(tap_interval=None, min_tap_delay=None):
+    """
+    Configure global multi-tap timing settings.
+
+    Args:
+        tap_interval: Maximum time between taps in seconds (0.15 to 1.5)
+        min_tap_delay: Minimum time between taps to avoid repeats (0.05 to 0.5)
+
+    Example:
+        multitap_config(
+            tap_interval=0.3,    # 300ms between taps
+            min_tap_delay=0.10   # 100ms repeat protection
+        )
+    """
+    global _MULTITAP_CONFIG
+
+    if tap_interval is not None:
+        if isinstance(tap_interval, (int, float)) and 0.15 <= tap_interval <= 1.5:
+            _MULTITAP_CONFIG['tap_interval'] = float(tap_interval)
+            debug(f"## multitap_config: Set tap_interval to {tap_interval}s")
+        else:
+            debug(f"## multitap_config: Invalid tap_interval {tap_interval}, must be 0.15-1.5 sec")
+
+    if min_tap_delay is not None:
+        if isinstance(min_tap_delay, (int, float)) and 0.05 <= min_tap_delay <= 0.5:
+            _MULTITAP_CONFIG['min_tap_delay'] = float(min_tap_delay)
+            debug(f"## multitap_config: Set min_tap_delay to {min_tap_delay}s")
+        else:
+            debug(f"## multitap_config: Invalid min_tap_delay {min_tap_delay}, must be 0.05-0.5 sec")
+
+    # Ensure ignore time is less than interval time
+    if _MULTITAP_CONFIG['min_tap_delay'] >= _MULTITAP_CONFIG['tap_interval']:
+        original_delay = _MULTITAP_CONFIG['min_tap_delay']
+        _MULTITAP_CONFIG['min_tap_delay'] = _MULTITAP_CONFIG['tap_interval'] * 0.25
+        debug(f"## multitap_config: min_tap_delay ({original_delay}s) >= tap_interval, "
+                f"adjusted to {_MULTITAP_CONFIG['min_tap_delay']:.3f}s")
+
+
+def isMultiTap( tap_1_action: Optional[Callable] = None,
+                tap_2_action: Optional[Callable] = None,
+                tap_3_action: Optional[Callable] = None, 
+                tap_4_action: Optional[Callable] = None,
+                tap_5_action: Optional[Callable] = None,
+                tap_interval: float = None,
+                min_tap_delay: float = None) -> Callable:
+    """
+    Multi-tap handler that supports 1-5 taps with asyncio.
+
+    Args:
+        tap_1_action: Function to call on single tap (can be None to block single-tap)
+        tap_2_action: Function to call on double tap
+        tap_3_action: Function to call on triple tap  
+        tap_4_action: Function to call on quadruple tap
+        tap_5_action: Function to call on quintuple tap
+        tap_interval: Max time between taps (None = use global config)
+        min_tap_delay: Min time between taps to avoid key repeat (None = use global config)
+
+    Returns:
+        Function that handles the tap detection
+    """
+
+    # Use global config values if not explicitly provided
+    if tap_interval is None:
+        tap_interval = _MULTITAP_CONFIG['tap_interval']
+    if min_tap_delay is None:
+        min_tap_delay = _MULTITAP_CONFIG['min_tap_delay']
+
+    # Use action tuple as unique identifier, converting lists to tuples for hashability
+    def make_hashable(action):
+        if isinstance(action, list):
+            return tuple(make_hashable(item) for item in action)
+        return action
+
+    action_key = (
+        make_hashable(tap_1_action),
+        make_hashable(tap_2_action), 
+        make_hashable(tap_3_action),
+        make_hashable(tap_4_action),
+        make_hashable(tap_5_action)
+    )
+
+    def execute_action_for_tap_count(   tap_count: int,
+                                        captured_ctx,
+                                        tap_1_action,
+                                        tap_2_action,
+                                        tap_3_action,
+                                        tap_4_action,
+                                        tap_5_action):
+        """Execute the appropriate action based on tap count."""
+        actions = {
+            1: tap_1_action,
+            2: tap_2_action, 
+            3: tap_3_action,
+            4: tap_4_action,
+            5: tap_5_action
+        }
+
+        action = actions.get(tap_count)
+        if action is not None:
+            try:
+                debug(f"## isMultiTap: Executing {tap_count}-tap action for {action_key}")
+                process_multitap_command(action, captured_ctx)
+                debug(f"## isMultiTap: Completed {tap_count}-tap action for {action_key}")
+            except Exception as e:
+                debug(f"## isMultiTap: Error executing {tap_count}-tap action: {e}")
+        else:
+            debug(f"## isMultiTap: No action defined for {tap_count} taps on {action_key}")
+
+    def finalize_taps(action_key: tuple, captured_ctx):
+        """Called when tap sequence is finalized."""
+        if action_key in tap_states:
+            state = tap_states[action_key]
+            tap_count = state['count']
+            debug(f"## isMultiTap: Finalizing {tap_count} taps for {action_key}")
+
+            # Get the actions before cleaning up state
+            stored_tap_1_action = state['tap_1_action']
+            stored_tap_2_action = state['tap_2_action']
+            stored_tap_3_action = state['tap_3_action']
+            stored_tap_4_action = state['tap_4_action']
+            stored_tap_5_action = state['tap_5_action']
+
+            # Clean up state
+            del tap_states[action_key]
+
+            # Execute appropriate action with captured context
+            execute_action_for_tap_count(   tap_count,
+                                            captured_ctx,
+                                            stored_tap_1_action,
+                                            stored_tap_2_action,
+                                            stored_tap_3_action,
+                                            stored_tap_4_action,
+                                            stored_tap_5_action)
+
+    def _isMultiTap(ctx) -> None:
+        loop = get_loop()
+        if loop is None:
+            debug(f"## isMultiTap: No event loop available for {action_key}")
+            return None
+
+        current_time = time.time()
+
+        # Initialize or get existing state
+        if action_key not in tap_states:
+            tap_states[action_key] = {
+                'count': 0,
+                'last_tap_time': 0.0,
+                'finalize_handle': None,
+                'captured_ctx': ctx,
+                # Store the individual actions in the state
+                'tap_1_action': tap_1_action,
+                'tap_2_action': tap_2_action,
+                'tap_3_action': tap_3_action,
+                'tap_4_action': tap_4_action,
+                'tap_5_action': tap_5_action,
+            }
+
+        state = tap_states[action_key]
+        time_since_last = current_time - state['last_tap_time']
+
+        # Check if this tap is too soon (key repeat protection)
+        if state['count'] > 0 and time_since_last < min_tap_delay:
+            debug(  f"## isMultiTap: Ignoring repeat for {action_key} "
+                    f"(too soon: {time_since_last:.3f}s)")
+            return None
+
+        # Check if this tap is too late (start new sequence)
+        if state['count'] > 0 and time_since_last >= tap_interval:
+            debug(  f"## isMultiTap: Too late for {action_key} "
+                    f"(gap: {time_since_last:.3f}s), finalizing previous")
+            # Finalize the previous sequence with its captured context
+            finalize_taps(action_key, state['captured_ctx'])
+            # Start new sequence with current context
+            tap_states[action_key] = {
+                'count': 0,
+                'last_tap_time': 0.0,
+                'finalize_handle': None,
+                'captured_ctx': ctx,
+                # Store the individual actions in the state
+                'tap_1_action': tap_1_action,
+                'tap_2_action': tap_2_action,
+                'tap_3_action': tap_3_action,
+                'tap_4_action': tap_4_action,
+                'tap_5_action': tap_5_action,
+            }
+            state = tap_states[action_key]
+
+        # Cancel any pending finalization
+        finalize_handle: Optional[asyncio.Handle] = state['finalize_handle']
+        if finalize_handle is not None:
+            finalize_handle.cancel()
+            state['finalize_handle'] = None
+
+        # Increment tap count
+        state['count'] += 1
+        state['last_tap_time'] = current_time
+
+        debug(f"## isMultiTap: Tap #{state['count']} for {action_key}")
+
+        # If we've exceeded max taps (5), ignore subsequent taps
+        if state['count'] > 5:
+            debug(f"## isMultiTap: Ignoring tap beyond maximum (tap #{state['count']})")
+            return None
+
+        # Schedule finalization after the interval for all tap counts
+        if state['tap_1_action'] or state['count'] > 1:
+            captured_ctx = state['captured_ctx']
+            handle: asyncio.Handle = loop.call_later(
+                tap_interval, 
+                lambda: finalize_taps(action_key, captured_ctx)  # Pass captured context
+            )
+            state['finalize_handle'] = handle
+            debug(f"## isMultiTap: Scheduled finalization for {action_key} in {tap_interval}s")
+
+        # Return None since we're handling actions asynchronously
+        return None
+
+    return _isMultiTap
 
 
 
@@ -3778,9 +4108,9 @@ keymap("General File Managers - Finder Mods", {
 ####################################################################################
 
 keymap("Firefox Browsers Overrides", {
-    C("C-comma"):              [C("C-t"), sleep(0.1),
+    C("C-comma"):              [C("C-t"), sleep(0.2),
                                 ST("about:preferences"),
-                                sleep(0.1), C("Enter")],            # Open preferences
+                                sleep(0.2), C("Enter")],            # Open preferences (Settings)
     C("Shift-RC-N"):            C("Shift-C-P"),                     # Open private window with Cmd+Shift+N like other browsers
     C("RC-Backspace"):         [C("Shift-Home"), C("Backspace")],   # Delete Entire Line Left of Cursor
     C("RC-Delete"):            [C("Shift-End"), C("Delete")],       # Delete Entire Line Right of Cursor
@@ -3799,25 +4129,60 @@ keymap("Zotero", {
     cnfg.screen_has_focus and
     matchProps(clas="^.*Zotero.*$")(ctx) )
 
+
+keymap("Vivaldi browser - Settings dialog", {
+    C("Esc"):                   C("Alt-F4"),                    # Close Settings dialog with Escape
+}, when = lambda ctx:
+    cnfg.screen_has_focus and
+    matchProps(clas="^Vivaldi.*$", name="^Vivaldi Settings:.*Vivaldi$")(ctx) )
+
 # Vivaldi is a Chromium based web browser
 keymap("Overrides for Vivaldi browser", {
-    C("RC-comma"):              C("C-F12"),                     # Open preferences
+
+    # These get caught by the shell in KDE Plasma!!! (Show Desktop and Go to Desktop 1 shortcuts):
+    # C("RC-comma"):              C("C-F12"),                     # Open preferences (Settings)
+    # C("RC-Slash"):              C("C-F1"),                      # Keyboard Cheat Sheet (shortcuts)
+
+    # This only opens the normal Chrome-like settings page, not the special Vivaldi settings dialog:
+    # C("C-comma"):              [C("C-t"), sleep(0.1),
+    #                             ST("chrome://settings"),
+    #                             sleep(0.1), C("Enter")],        # Open preferences (Settings)
+
+    # Alternatives using macros to avoid issues with KDE Plasma global shortcuts (see above):
+    C("RC-Slash"):             [C("F10"),
+                                sleep(0.2), C("H"),
+                                sleep(0.2), C("K")],            # Keyboard Cheat Sheet (shortcuts)
+
+    C("C-comma"):              [C("F10"),
+                                sleep(0.2), C("S")],            # Open preferences (Settings)
+
+    # Browser tab switching
+    C("RC-1"):                  C("C-1"),                       # Jump to Tab #1
+    C("RC-2"):                  C("C-2"),                       # Jump to Tab #2
+    C("RC-3"):                  C("C-3"),                       # Jump to Tab #3
+    C("RC-4"):                  C("C-4"),                       # Jump to Tab #4
+    C("RC-5"):                  C("C-5"),                       # Jump to Tab #5
+    C("RC-6"):                  C("C-6"),                       # Jump to Tab #6
+    C("RC-7"):                  C("C-7"),                       # Jump to Tab #7
+    C("RC-8"):                  C("C-8"),                       # Jump to Tab #8
+    C("RC-9"):                  C("C-9"),                       # Jump to last tab
+
 }, when = lambda ctx:
     cnfg.screen_has_focus and
     matchProps(clas="^Vivaldi.*$")(ctx) )
 
 # Falkon is a Chromium based web browser
 keymap("Overrides for Falkon browser", {
-    C("RC-comma"):              C("Shift-C-comma"),             # Open preferences
+    C("RC-comma"):              C("Shift-C-comma"),             # Open preferences (Settings)
 }, when = lambda ctx:
     cnfg.screen_has_focus and
     matchProps(clas="^org.kde.falkon$|^Falkon$")(ctx) )
 
 keymap("Chrome Browsers Overrides", {
-    # C("C-comma"):              [C("Alt-e"), C("s"),C("Enter")], # Open preferences
-    C("C-comma"):              [C("C-t"), sleep(0.1),
+    # C("C-comma"):              [C("Alt-e"), C("s"),C("Enter")], # Open preferences (Settings)
+    C("C-comma"):              [C("C-t"), sleep(0.2),
                                 ST("chrome://settings"),
-                                sleep(0.1), C("Enter")],        # Open preferences
+                                sleep(0.2), C("Enter")],        # Open preferences (Settings)
     C("RC-q"):                  C("Alt-F4"),                    # Quit Chrome(s) browsers with Cmd+Q
     # C("RC-Left"):               C("Alt-Left"),                  # Page nav: Back to prior page in history (conflict with wordwise)
     # C("RC-Right"):              C("Alt-Right"),                 # Page nav: Forward to next page in history (conflict with wordwise)
@@ -3836,15 +4201,15 @@ keymap("General Web Browsers", {
     C("RC-Q"):                  C("C-Q"),                       # Close all browsers Instances
     C("Alt-RC-I"):              C("Shift-C-I"),                 # Dev tools
     C("Alt-RC-J"):              C("Shift-C-J"),                 # Dev tools
-    C("RC-Key_1"):              C("Alt-Key_1"),                 # Jump to Tab #1-#8
-    C("RC-Key_2"):              C("Alt-Key_2"),
-    C("RC-Key_3"):              C("Alt-Key_3"),
-    C("RC-Key_4"):              C("Alt-Key_4"),
-    C("RC-Key_5"):              C("Alt-Key_5"),
-    C("RC-Key_6"):              C("Alt-Key_6"),
-    C("RC-Key_7"):              C("Alt-Key_7"),
-    C("RC-Key_8"):              C("Alt-Key_8"),
-    C("RC-Key_9"):              C("Alt-Key_9"),                 # Jump to last tab
+    C("RC-1"):                  C("Alt-1"),                     # Jump to Tab #1
+    C("RC-2"):                  C("Alt-2"),                     # Jump to Tab #2
+    C("RC-3"):                  C("Alt-3"),                     # Jump to Tab #3
+    C("RC-4"):                  C("Alt-4"),                     # Jump to Tab #4
+    C("RC-5"):                  C("Alt-5"),                     # Jump to Tab #5
+    C("RC-6"):                  C("Alt-6"),                     # Jump to Tab #6
+    C("RC-7"):                  C("Alt-7"),                     # Jump to Tab #7
+    C("RC-8"):                  C("Alt-8"),                     # Jump to Tab #8
+    C("RC-9"):                  C("Alt-9"),                     # Jump to last tab
     # Enable Cmd+Shift+Braces for tab navigation (redundant with General GUI)
     # C("Shift-RC-Left_Brace"):   C("C-Page_Up"),                 # Go to prior tab
     # C("Shift-RC-Right_Brace"):  C("C-Page_Down"),               # Go to next tab
@@ -4048,6 +4413,7 @@ keymap("VSCodes", {
     C("Alt-RC-R"):              C("Alt-R"),                     # Find: toggle "Use Regular Expression"
     C("Alt-RC-L"):              C("Alt-L"),                     # Find: toggle "Find in Selection"
     C("Alt-RC-P"):              C("Alt-P"),                     # Replace: toggle "Preserve Case"
+    C("RC-Enter"):              C("C-Alt-Enter"),               # Find: Replace All
 
     C("Alt-RC-Z"):              C("Alt-Z"),                     # View: toggle "Word Wrap"
 
@@ -4521,6 +4887,7 @@ if DESKTOP_ENV == 'kde':
         C("LC-Space"):              [bind,C("Super-Alt-L")],        # keyboard input source (layout) switching (Last-Used) (kde)
         C("Shift-LC-Space"):        [bind,C("Super-Alt-K")],        # keyboard input source (layout) switching (Next) (kde)
         C("RC-H"):                  C("Super-Page_Down"),           # Hide Window/Minimize app (KDE Plasma)
+
         # C("LC-RC-f"):               C("Alt-F10"),                   # Toggle window maximized state (pre-Plasma 6)
         # F10 key was designated an accessibility key for opening the window/app menu in KDE.
         # The shortcut for toggling window maximization state is now Meta+PgUp (so, Super-Page_Up).
@@ -4693,6 +5060,14 @@ keymap("GenGUI overrides: not Chromebook", {
 
 # Overrides to General GUI shortcuts for specific distros
 
+if DISTRO_ID in ['almalinux', 'rhel', 'rocky'] and DESKTOP_ENV == 'xfce':
+    keymap("GenGUI overrides: Alma/Rocky Xfce4", {
+        C("RC-Space"):             [iEF2NT(),C("Alt-F3")],       # Launch App Finder xfce4 (AlmaLinux/Rocky)
+    }, when = lambda ctx:
+        cnfg.screen_has_focus and
+        matchProps(not_clas=remoteStr)(ctx)
+    )
+
 if DISTRO_ID == 'debian' and DESKTOP_ENV == 'xfce':
     keymap("GenGUI overrides: Debian Xfce4", {
         C("RC-Space"):             [iEF2NT(),C("Alt-F1")],     # Launch Application Menu xfce4 (Debian)
@@ -4775,7 +5150,6 @@ if DISTRO_ID == 'ubuntu':
         cnfg.screen_has_focus and
         matchProps(not_clas=remoteStr)(ctx)
     )
-
 
 
 # Overrides to General GUI shortcuts for specific desktop environments
@@ -4896,7 +5270,7 @@ if DESKTOP_ENV == 'kde':
         C("Super-Left"):            C("C-Super-Left"),              # Switch one desktop to the left
         C("Super-Right"):           C("C-Super-Right"),             # Switch one desktop to the right
 
-        # C("Super-RC-f"):               C("Alt-F10"),                   # Toggle window maximized state (pre-Plasma 6)
+        # C("Super-RC-f"):            C("Alt-F10"),                   # Toggle window maximized state (pre-Plasma 6)
         # F10 key was designated an accessibility key for opening the window/app menu in KDE.
         # The shortcut for toggling window maximization state is now Meta+PgUp (so, Super-Page_Up).
         C("Super-RC-f"):            C("Super-Page_Up"),             # Toggle window maximized state
@@ -4915,10 +5289,19 @@ if DESKTOP_ENV == 'kde':
         matchProps(not_clas=remoteStr)(ctx)
     )
 
-if DESKTOP_ENV == 'mate':
-    keymap("GenGUI overrides: MATE", {
-        # Right click, configure Mint menu shortcut to match `Alt+Space` shortcut
-        C("RC-Space"):             [iEF2NT(),C("Alt-Space")],       # Open Mint app menu
+if DESKTOP_ENV == 'mate' and DISTRO_ID == 'mint':
+    keymap("GenGUI overrides: MATE on Mint", {
+        # Right click, configure Mint menu shortcut to match `Alt+Space` shortcut to make this work
+        C("RC-Space"):             [iEF2NT(), C("Alt-Space")],       # Open Mint app menu
+    }, when = lambda ctx:
+        cnfg.screen_has_focus and
+        matchProps(not_clas=remoteStr)(ctx)
+    )
+
+if DESKTOP_ENV == 'mate' and DISTRO_ID == 'ubuntu':
+    keymap("GenGUI overrides: MATE on Ubuntu", {
+        # No way to reconfigure the shortcut for Brisk Menu Launcher?
+        C("RC-Space"):             [iEF2NT(), Key.LEFT_META],       # Open Brisk Menu Launcher
     }, when = lambda ctx:
         cnfg.screen_has_focus and
         matchProps(not_clas=remoteStr)(ctx)
@@ -5071,8 +5454,39 @@ keymap("General GUI", {
 )
 
 
-keymap("Diagnostics", {
-    C("Shift-Alt-RC-i"):        isDoubleTap(notify_context),    # Diagnostic dialog (primary)
-    C("Shift-Alt-RC-h"):        isDoubleTap(notify_context),    # Diagnostic dialog (alternate)
-    C("Shift-Alt-RC-t"):        isDoubleTap(macro_tester),      # Type out test macro
-}, when = lambda ctx: ctx is ctx )
+keymap("Diagnostics (isMultiTap)", {
+
+    C("Shift-Alt-RC-i"): isMultiTap(
+                            # tap_1_action=None,  # Block single tap
+                            tap_1_action=C("Shift-Alt-C-i"),    # Keep original single-tap combo
+                            tap_2_action=notify_context,
+                        ),
+
+    C("Shift-Alt-RC-h"): isMultiTap(
+                            tap_1_action=C("Shift-Alt-RC-h"),   # Keep original single-tap combo
+                            tap_2_action=notify_context,
+                            tap_3_action=lambda: print("\nTriple tap!\n"),  # Shows in terminal
+                        ),
+
+    C("Shift-Alt-RC-t"): isMultiTap(
+                            tap_1_action=C("C-n"),          # Test single-tap by opening new window
+                            tap_2_action=macro_tester,      # Types out a long test macro text
+                            tap_3_action=[
+                                ST("You tapped Shift-Alt-C-t 3 times!!!"),
+                                C("Enter"), C("Enter")],
+                            tap_4_action=[
+                                ST("You tapped Shift-Alt-C-t 4 times!!!!"),
+                                C("Enter"), C("Enter")],
+                            tap_5_action=[
+                                ST("You tapped Shift-Alt-C-t 5 times!!!!!"),
+                                C("Enter"), C("Enter")],
+                        ),
+
+}, when = lambda ctx: ctx is ctx)
+
+
+# keymap("Diagnostics (isDoubleTap)", {
+#     C("Shift-Alt-RC-i"):        isDoubleTap(notify_context),    # Diagnostic dialog (primary)
+#     C("Shift-Alt-RC-h"):        isDoubleTap(notify_context),    # Diagnostic dialog (alternate)
+#     C("Shift-Alt-RC-t"):        isDoubleTap(macro_tester),      # Type out test macro
+# }, when = lambda ctx: ctx is ctx )
