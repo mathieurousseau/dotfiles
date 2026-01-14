@@ -11,9 +11,8 @@ return {
     },
     keys = {
 
-
-      { "<A-i>", '<Cmd>lua require("FTerm").toggle()<CR>',            desc = "[T]oggle FTerm" },
-      { '<A-i>', '<C-\\><C-n><CMD>lua require("FTerm").toggle()<CR>', mode = { 't' } },
+      { "<A-i>", '<Cmd>lua require("FTerm").toggle()<CR>', desc = "[T]oggle FTerm" },
+      { '<A-i>', '<CMD>lua require("FTerm").toggle()<CR>', mode = { 't' } },
 
     }
   }
