@@ -197,6 +197,7 @@ return {
           }
         },
         buf_ls = {},
+        expert = {},
         -- elixirls = {},
         lua_ls = {
           -- cmd = {...},

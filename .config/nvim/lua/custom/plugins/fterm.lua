@@ -13,6 +13,7 @@ return {
 
       { "<A-i>", '<Cmd>lua require("FTerm").toggle()<CR>', desc = "[T]oggle FTerm" },
       { '<A-i>', '<CMD>lua require("FTerm").toggle()<CR>', mode = { 't' } },
+      { '<C-n>', '<C-\\><C-n>',                            mode = { 't' } },
 
     }
   }

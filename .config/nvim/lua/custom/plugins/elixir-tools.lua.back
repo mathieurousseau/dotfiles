@@ -14,14 +14,18 @@ return {
           -- mix_env = "test"
           -- }
         },
+        expert = {
+          enable = true,
+        },
         elixirls = {
           -- tag = "v0.26.4",
           branch = "master",
-          enable = true,
+          enable = false,
           -- },
           settings = elixirls.settings {
             dialyzerEnabled = false,
             enableTestLenses = false,
+            fetchDeps = true,
           },
           --   on_attach = function(client, bufnr)
           --     vim.keymap.set("n", "<space>fp", ":ElixirFromPipe<cr>", { buffer = true, noremap = true })

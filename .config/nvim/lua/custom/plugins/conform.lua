@@ -29,11 +29,10 @@ return {
         return {
           timeout_ms = 500,
           lsp_format = lsp_format_opt,
-          lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
         }
       end,
       formatters_by_ft = {
-        lua = { 'lua_ls' },
+        lua = { 'stylua' },
         java = { 'google-java-format' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
