@@ -10,7 +10,7 @@ return {
     }
     local language_servers = vim.lsp.get_clients()
     for _, ls in ipairs(language_servers) do
-      vim.lsp.config(ls, {
+      vim.lsp.config(ls.name, {
         capabilities = capabilities
         -- you can add other fields for setting up lsp server in this table
       })

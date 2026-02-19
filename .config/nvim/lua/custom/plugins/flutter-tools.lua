@@ -7,7 +7,15 @@ return {
       'stevearc/dressing.nvim',
     },
     config = function()
-      require('flutter-tools').setup({})
+      -- flutter-tools wraps `lsp.settings` inside `dart = { ... }` for dartls,
+      -- so provide the flat settings table here.
+      require('flutter-tools').setup({
+        lsp = {
+          settings = {
+            lineLength = 120,
+          },
+        },
+      })
     end,
     keys = {
       { "<leader>fr", "<Cmd>FlutterReload <CR>",          desc = "[F]utter reload" },

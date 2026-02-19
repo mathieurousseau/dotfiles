@@ -27,15 +27,6 @@ return {
         end
       end, 100)
 
-      -- Enable treesitter highlighting for all buffers with a parser
-      vim.api.nvim_create_autocmd('FileType', {
-        callback = function(args)
-          local ok = pcall(vim.treesitter.start, args.buf)
-          if not ok then
-            pcall(vim.treesitter.stop, args.buf)
-          end
-        end,
-      })
     end,
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
