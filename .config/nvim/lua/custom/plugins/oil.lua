@@ -1,7 +1,7 @@
 return {
   {
     'stevearc/oil.nvim',
-    lazy = false,
+    lazy = true,
     opts = {},
     keys = {
       { '-', '<cmd>Oil<cr>', desc = 'Open parent directory' },
