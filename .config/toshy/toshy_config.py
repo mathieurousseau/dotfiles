@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
-__version__ = '20250823'
+__version__ = '20260101'
 ###############################################################################
 ############################   Welcome to Toshy!   ############################
-###  
-###  This is a highly customized fork of the config file that powers 
+###
+###  This is a highly customized fork of the config file that powers
 ###  Kinto.sh, by Ben Reaves
 ###      (https://kinto.sh)
-###  
-###  All credit for the basis of this config goes to Ben Reaves. 
+###
+###  All credit for the basis of this config goes to Ben Reaves.
 ###      (https://github.com/rbreaves/kinto/)
-###  
+###
 ###  Much assistance was provided by Josh Goebel, the developer of the
 ###  `xkeysnail` fork `keyszer`, which is now forked into `xwaykeyz` to
 ###  provide support for some (most?) Wayland environments.
 ###      (http://github.com/joshgoebel/keyszer)
-###  
+###
 ###############################################################################
 
 import re
@@ -82,8 +82,8 @@ devices_api(
 # How to add an alias to an existing modifier definition (VERY EXPERIMENTAL!!!)
 # Some of these are disabled because I'm not sure they would apply correctly
 # to all of the different keyboard types. But virtualized Command and Left Ctrl,
-# Left Option aliases should make sense for all keyboard types. 
-# WARNING: It is not advisable to start using these in actual input 
+# Left Option aliases should make sense for all keyboard types.
+# WARNING: It is not advisable to start using these in actual input
 # combos in keymaps. These aliases may be removed in the future.
 try:
     ###########################################################################
@@ -147,7 +147,7 @@ except AttributeError as e:
 
 
 ###################################################################################################
-# Some important setup work necessary to make custom preferences, 
+# Some important setup work necessary to make custom preferences,
 # notifications and Synergy log monitoring work.
 home_dir = os.path.expanduser('~')
 icons_dir = os.path.join(home_dir, '.local', 'share', 'icons')
@@ -219,7 +219,7 @@ wlroots_compositors             = [
 ###  SLICE_MARK_END: env_overrides  ###  EDITS OUTSIDE THESE MARKS WILL BE LOST ON UPGRADE
 ###################################################################################################
 
-# Leave all of this alone! Don't try to override values here. 
+# Leave all of this alone! Don't try to override values here.
 DISTRO_ID                       = None
 DISTRO_VER                      = None
 VARIANT_ID                      = None
@@ -266,7 +266,7 @@ known_wlroots_compositors = [
 ]
 
 # Make sure the 'wlroots_compositors' list variable exists before checking it.
-# Older config files won't have it in the 'env_overrides' slice. 
+# Older config files won't have it in the 'env_overrides' slice.
 wlroots_compositors = locals().get('wlroots_compositors', [])
 
 all_wlroots_compositors = known_wlroots_compositors + wlroots_compositors
@@ -338,10 +338,10 @@ UC = unicode_keystrokes
 ignore_combo = ComboHint.IGNORE
 
 ###############################################################################
-# This is a "trick" to negate the need to put quotes around all the key labels 
+# This is a "trick" to negate the need to put quotes around all the key labels
 # inside the "lists of dicts" to be given to the matchProps() function.
-# Makes the variables evaluate to equivalent strings inside the dicts. 
-# Provides for nice syntax highlighting and visual separation of key:value. 
+# Makes the variables evaluate to equivalent strings inside the dicts.
+# Provides for nice syntax highlighting and visual separation of key:value.
 clas        = 'clas'        # key label for matchProps() arg to match: wm_class
 name        = 'name'        # key label for matchProps() arg to match: wm_name
 devn        = 'devn'        # key label for matchProps() arg to match: device_name
@@ -360,7 +360,7 @@ tapInterval = 0.24
 tapCount = 0
 last_dt_combo = None
 
-# Set this variable to False to disable the alert that appears 
+# Set this variable to False to disable the alert that appears
 # when using Apple logo shortcut (Shift+Option+K)
 applelogoalert_enabled = True   # Default: True
 
@@ -417,7 +417,7 @@ def create_list_of_dicts(lst: List[str]):
 
 terminals = [
     "alacritty",
-    "com.mitchellh.ghostty",
+    # "com.mitchellh.ghostty",          # Replaced with double-wildcard ghostty pattern
     "com.raggesilver.BlackBox",
     "com.system76.CosmicTerm",
     "contour",
@@ -425,8 +425,9 @@ terminals = [
     "deepin-terminal",
     "dev.warp.Warp",
     "eterm",
-    "ghostty",
-    "ghostty-debug",
+    ".*ghostty.*",
+    # "ghostty",                        # Replaced with double-wildcard ghostty pattern
+    # "ghostty-debug",                  # Replaced with double-wildcard ghostty pattern
     "gnome-terminal",
     "gnome-terminal-server",
     "guake",
@@ -441,7 +442,7 @@ terminals = [
     "MateTerminal",
     "org.codeberg.dnkl.foot.desktop",
     "org.gnome.Console",
-    # "org.gnome.Ptyxis.*",             # Replaced by double-wildcard entry
+    # "org.gnome.Ptyxis.*",             # Replaced by double-wildcard Ptyxis pattern
     "org.gnome.Terminal",
     "org.kde.konsole",
     "org.kde.yakuake",
@@ -478,7 +479,7 @@ vscodes = [
     "code",
     "code - oss",
     "code-oss",
-    "cursor",           # New VSCode variant with A.I. 
+    "cursor",           # New VSCode variant with A.I.
     "vscodium",
 ]
 vscodes                         = [x.casefold() for x in vscodes]
@@ -512,8 +513,8 @@ transmissionStr                 = toRgxStr(transmissions)
 
 # Add remote desktop clients & VM software here
 # Ideally we'd only exclude the client window,
-# but that may not be easily done. 
-# (Can be done now with `keyszer`, as long as main window has a 
+# but that may not be easily done.
+# (Can be done now with `keyszer`, as long as main window has a
 # different WM_NAME than client windows. See `remotes_lod` below.)
 remotes = [
     "Anydesk",
@@ -541,7 +542,7 @@ remotes_lod = [
     {clas: "^Anydesk$"                       },
     {clas: "^Gnome-boxes$"                   },
     {clas: "^gnome-connections$"             },
-    {clas: "^org.remmina.Remmina$", 
+    {clas: "^org.remmina.Remmina$",
         not_name: "^Remmina Remote Desktop Client$|^Remote Connection Profile$"},
     {clas: "^Nxplayer.bin$"                  },
     {clas: "^remmina$"                       },
@@ -556,7 +557,7 @@ remotes_lod = [
 ]
 
 terms_and_remotes_lst = terminals + remotes
-terms_and_remotes_Str = toRgxStr(terms_and_remotes_lst) 
+terms_and_remotes_Str = toRgxStr(terms_and_remotes_lst)
 
 # DEPRECATED: Converted back to simple list
 terminals_and_remotes_lod = [
@@ -597,9 +598,11 @@ browsers_chromeStr      = "|".join('^'+x+'$' for x in browsers_chrome)
 browsers_firefox = [
     "firedragon",               # Garuda Firefox fork
     "Firefox",
+    "firefox_.*",   # Catch "firefox_firefox" (WTF?), seen on Ubuntu Cinnamon 25.10 in X11 session
     "firefox-esr",
     "Firefox Developer Edition",
     "firefoxdeveloperedition",
+    "firefox-nightly.*",
     "floorp",
     "LibreWolf",
     "Mullvad Browser",
@@ -608,9 +611,9 @@ browsers_firefox = [
     "Waterfox",
     "zen-browser",
     "zen",
-    "zen-bin",
     "zen-alpha",
     "zen-beta",
+    "zen-bin",
     "zen-twilight",
 ]
 browsers_firefox        = [x.casefold() for x in browsers_firefox]
@@ -704,8 +707,6 @@ keyboards_UserCustom_dct = {
     # Example:
     'Corne Keyboard': 'Apple',
     'Red-Corne Keyboard': 'Apple',
-    'HHKB_Hybrid_1 Keyboard': 'Apple',
-    'PFU Limited HHKB-Hybrid Keyboard': 'Apple',
     'ZMK Project Corne Keyboard': 'Apple',
     'ZMK Project Red-Corne Keyboard': 'Apple'
 }
@@ -761,7 +762,7 @@ kbds_Chromebook_rgx = [re.compile(kb.replace(" ", ".*"), re.I) for kb in keyboar
 kbds_Windows_rgx    = [re.compile(kb.replace(" ", ".*"), re.I) for kb in keyboards_Windows]
 kbds_Apple_rgx      = [re.compile(kb.replace(" ", ".*"), re.I) for kb in keyboards_Apple]
 
-# Dict mapping keyboard type keywords onto 
+# Dict mapping keyboard type keywords onto
 kbtype_lists_rgx    = {
     'IBM':          kbds_IBM_rgx,
     'Chromebook':   kbds_Chromebook_rgx,
@@ -885,8 +886,8 @@ def getKBtype():
                 return
 
         # Check if the device name indicates a "Windows" keyboard
-        if ('windows' not in kbd_dev_name_cf 
-            and not not_win_type_rgx.search(kbd_dev_name_cf) 
+        if ('windows' not in kbd_dev_name_cf
+            and not not_win_type_rgx.search(kbd_dev_name_cf)
             and not all_kbds_rgx.search(kbd_dev_name_cf) ):
             KBTYPE = 'Windows'
             log_kbtype('Default type for dev', cache_dev=True)
@@ -906,23 +907,23 @@ def isDoubleTap(dt_combo):
     Simplistic detection of double-tap of a key or combo.
 
     BLOCKS single-tap function, if used with a single key as the input, but the
-    'normal' (non-modifier) key of a combo will still be usable when used by 
+    'normal' (non-modifier) key of a combo will still be usable when used by
     itself as a non-double-tapped key press.
 
     Example: 'RC-CapsLock' will respond when "Cmd" key (under Toshy remapping)
-    is held and CapsLock key is double-tapped. Nothing will happen if 
+    is held and CapsLock key is double-tapped. Nothing will happen if
     Cmd+CapsLock is pressed without double-tapping CapsLock key within the
     configured time interval. But the CapsLock key will still work by itself.
 
     If double-tap input "combo" is just 'CapsLock', the functioning of a single-tap
-    CapsLock key press will be BLOCKED. Nothing will happen unless the key is 
+    CapsLock key press will be BLOCKED. Nothing will happen unless the key is
     double-tapped within the configured time interval.
 
     Only cares about the 'real' key in a combo of Mods+key, like in the example
-    above with 'RC-CapsLock'. 
+    above with 'RC-CapsLock'.
 
     The proper way to do this would be inside the keymapper, in the async event loop
-    that deals with input/output functions. 
+    that deals with input/output functions.
     """
     def _isDoubleTap():
         global tapTime1
@@ -941,7 +942,7 @@ def isDoubleTap(dt_combo):
             debug(f'## isDoubleTap: \n\tTime diff (too long): \n\t{_tapTime - tapTime1=}')
             tapCount = 0
         # Try to keep held key from producing repeats of dt_combo.
-        # If repeat rate very slow or delay very short, this won't work well. 
+        # If repeat rate very slow or delay very short, this won't work well.
         if tapCount == 1 and _tapTime - tapTime1 < 0.07:
             debug(f'## isDoubleTap: \n\tTime diff (too short): \n\t{_tapTime - tapTime1=}')
             tapCount = 0
@@ -952,7 +953,7 @@ def isDoubleTap(dt_combo):
             tapCount = 0
             tapTime1 = 0.0
             return dt_combo
-        # New cycle? Set count = 1, tapTime1 = now. Send nothing. 
+        # New cycle? Set count = 1, tapTime1 = now. Send nothing.
         if tapCount == 0:
             debug(f'## isDoubleTap: \n\tTime diff (1st cycle): \n\t{_tapTime - tapTime1=}')
             last_dt_combo = dt_combo
@@ -965,6 +966,7 @@ def isDoubleTap(dt_combo):
 total_matchProps_iterations = 0
 MAX_MATCHPROPS_ITERATIONS = 1000
 MAX_MATCHPROPS_ITERATIONS_REACHED = False
+MATCHPROPS_FULL_DEBUG = False  # Set True to disable short-circuits and enable full debug logging
 
 
 # Correct syntax to reject all positional parameters: put `*,` at beginning
@@ -990,7 +992,7 @@ def matchProps(*,
     - To negate/invert regex pattern match use:                     \n
         - `not_clas` `not_name` `not_devn` params or...             \n
         - "^(?:(?!^pattern$).)*$"                                   \n
-    - To force case insensitive pattern match use:                  \n 
+    - To force case insensitive pattern match use:                  \n
         - "^(?i:pattern)$" or...                                    \n
         - "^(?i)pattern$"                                           \n
 
@@ -1008,7 +1010,7 @@ def matchProps(*,
     `not_lst`  = `lst` but inverted, matches when "not"             \n
     `dbg`      = Debugging info             (string)                \n
 
-    ### Negative match parameters: 
+    ### Negative match parameters:
     - `not_clas`|`not_name`|`not_devn`                              \n
     Parameters take same regex patterns as `clas`|`name`|`devn`     \n
     but result in a True condition only if pattern is NOT found.    \n
@@ -1025,7 +1027,7 @@ def matchProps(*,
     help identify origin of logging output.                         \n
     -                                                               \n
     """
-    # Reference for successful negative lookahead pattern, and 
+    # Reference for successful negative lookahead pattern, and
     # explanation of why it works:
     # https://stackoverflow.com/questions/406230/\
         # regular-expression-to-match-a-line-that-doesnt-contain-a-word
@@ -1050,25 +1052,25 @@ def matchProps(*,
         # 'STARTUP_TIMESTAMP' is a global variable, set when config is executed
         time_elapsed = current_timestamp - STARTUP_TIMESTAMP
 
-        # Bypass all guard clauses if more than a few seconds have passed since keymapper 
-        # started and loaded the config file. Inputs never change until keymapper 
+        # Bypass all guard clauses if more than a few seconds have passed since keymapper
+        # started and loaded the config file. Inputs never change until keymapper
         # restarts and reloads the config file, so we don't need to keep checking.
         bypass_guard_clauses = time_elapsed > 6
 
     logging_enabled = False
 
-    allowed_params  = (clas, name, devn, not_clas, not_name, not_devn, 
+    allowed_params  = (clas, name, devn, not_clas, not_name, not_devn,
                         numlk, capslk, cse, lst, not_lst, dbg)
-    lst_dct_params  = (clas, name, devn, not_clas, not_name, not_devn, 
+    lst_dct_params  = (clas, name, devn, not_clas, not_name, not_devn,
                         numlk, capslk, cse)
     string_params   = (clas, name, devn, not_clas, not_name, not_devn, dbg)
 
-    # This was using up a lot of CPU time, actually. Bad idea. 
+    # This was using up a lot of CPU time, actually. Bad idea.
     # dct_param_strs  = list(inspect.signature(matchProps).parameters.keys())
 
-    # Static list of parameter names. Using this instead of `inspect` cuts CPU 
+    # Static list of parameter names. Using this instead of `inspect` cuts CPU
     # usage considerably, for reasons I don't yet understand. Apparently the
-    # keymapper is actually running the entire function again on each key 
+    # keymapper is actually running the entire function again on each key
     # press and release, rather than just re-evaluating the inner closure.
     dct_param_strs = [
         'clas', 'name', 'devn', 'not_clas', 'not_name', 'not_devn',
@@ -1076,9 +1078,9 @@ def matchProps(*,
     ]
 
     if not MAX_MATCHPROPS_ITERATIONS_REACHED or not bypass_guard_clauses:
-        if all([x is None for x in allowed_params]): 
+        if all([x is None for x in allowed_params]):
             raise ValueError(f"\n\n(EE) matchProps(): Received no valid argument\n")
-        if any([x not in (True, False, None) for x in (numlk, capslk, cse)]): 
+        if any([x not in (True, False, None) for x in (numlk, capslk, cse)]):
             raise TypeError(f"\n\n(EE) matchProps(): Params 'numlk|capslk|cse' are bools\n")
         if any([x is not None and not isinstance(x, str) for x in string_params]):
             raise TypeError(    f"\n\n(EE) matchProps(): These parameters must be strings:"
@@ -1098,9 +1100,9 @@ def matchProps(*,
     if _lst is not None:
 
         if not MAX_MATCHPROPS_ITERATIONS_REACHED or not bypass_guard_clauses:
-            if any([x is not None for x in lst_dct_params]): 
+            if any([x is not None for x in lst_dct_params]):
                 raise TypeError(f"\n\n(EE) matchProps(): Param 'lst|not_lst' must be used alone\n")
-            if not isinstance(_lst, list) or not all(isinstance(item, dict) for item in _lst): 
+            if not isinstance(_lst, list) or not all(isinstance(item, dict) for item in _lst):
                 raise TypeError(
                     f"\n\n(EE) matchProps(): Param 'lst|not_lst' wants a [list] of {{dicts}}\n")
             # verify that every {dict} in [list of dicts] only contains valid parameter names
@@ -1136,42 +1138,79 @@ def matchProps(*,
     def _matchProps(ctx: KeyContext):
         if not cnfg.screen_has_focus:
             return False
-        cond_list       = []
-        nt_err          = 'ERR: matchProps: NoneType in ctx.'
-        if _clas is not None:
-            clas_match = re.search(clas_rgx, ctx.wm_class or nt_err + 'wm_class')
-            cond_list.append(not clas_match if not_clas is not None else clas_match)
-        if _name is not None:
-            name_match = re.search(name_rgx, ctx.wm_name or nt_err + 'wm_name')
-            cond_list.append(not name_match if not_name is not None else name_match)
-        if _devn is not None:
-            devn_match = re.search(devn_rgx, ctx.device_name or nt_err + 'device_name')
-            cond_list.append(not devn_match if not_devn is not None else devn_match)
-        # these two MUST check explicitly for "is not None" because external input is True/False,
-        # and we want to be able to match the LED_on state of either "True" or "False"
-        if numlk is not None: cond_list.append( numlk is ctx.numlock_on  )
-        if capslk is not None: cond_list.append( capslk is ctx.capslock_on )
-        if logging_enabled: # and all(cnd_lst): # << add this to show only "True" condition lists
+
+        nt_err = 'ERR: matchProps: NoneType in ctx.'
+
+        # Full debug mode: use original cond_list approach for complete visibility
+        if MATCHPROPS_FULL_DEBUG:
+            cond_list = []
+            if numlk is not None:
+                cond_list.append(numlk is ctx.numlock_on)
+            if capslk is not None:
+                cond_list.append(capslk is ctx.capslock_on)
+            if _devn is not None:
+                devn_match = re.search(devn_rgx, ctx.device_name or nt_err + 'device_name')
+                cond_list.append(not devn_match if not_devn is not None else devn_match)
+            if _clas is not None:
+                clas_match = re.search(clas_rgx, ctx.wm_class or nt_err + 'wm_class')
+                cond_list.append(not clas_match if not_clas is not None else clas_match)
+            if _name is not None:
+                name_match = re.search(name_rgx, ctx.wm_name or nt_err + 'wm_name')
+                cond_list.append(not name_match if not_name is not None else name_match)
             print(f'####  CND_LST ({all(cond_list)})  ####  {dbg=}')
             for elem in cond_list:
                 print('##', re.sub(r'^.*span=.*\), ', '', str(elem)).replace('>',''))
             print('-------------------------------------------------------------------')
-        return all(cond_list)
+            return all(cond_list)
+
+        # Optimized path: short-circuit on first failure
+        # Order: cheapest checks first, then most selective (devn), then clas, then name
+
+        # Bool checks - nearly free (identity comparison)
+        if numlk is not None and numlk is not ctx.numlock_on:
+            return False
+        if capslk is not None and capslk is not ctx.capslock_on:
+            return False
+
+        # Device check - most selective, eliminates most keystrokes from other devices
+        if _devn is not None:
+            devn_match = re.search(devn_rgx, ctx.device_name or nt_err + 'device_name')
+            # XOR: fail if (negative match requested) == (match found)
+            if (not_devn is not None) == bool(devn_match):
+                return False
+
+        # Class check - moderately selective, often complex regex patterns
+        if _clas is not None:
+            clas_match = re.search(clas_rgx, ctx.wm_class or nt_err + 'wm_class')
+            if (not_clas is not None) == bool(clas_match):
+                return False
+
+        # Name check - least commonly used
+        if _name is not None:
+            name_match = re.search(name_rgx, ctx.wm_name or nt_err + 'wm_name')
+            if (not_name is not None) == bool(name_match):
+                return False
+
+        return True
 
     return _matchProps      # outer function returning inner function
 
 
 # Boolean variable to toggle Enter key state between F2 and Enter
 # True = Enter key sends F2, False = Enter key sends Enter
-_enter_is_F2 = True     # DON'T CHANGE THIS! Must be set to True here. 
+_enter_is_F2 = True                 # DON'T CHANGE THIS! Must be set to True here.
+_enter_F2_last_app_class = None     # Track which app set the state to be False
 
 
-def iEF2(combo_if_true, latch_or_combo_if_false, 
+def iEF2(combo_if_true, latch_or_combo_if_false,
                 keep_value_if_true=False, keep_value_if_false=False):
     """
     Formerly 'is_Enter_F2'
-    Send a different combo for the Enter key based on the state of the _enter_is_F2 variable,
+    Send a different combo for the Enter key based on the state of the `_enter_is_F2` variable,
     or latch the variable to True or False to control the Enter key output on the next use.
+
+    Store the app class of the file manager that sets the state variable to be False, and
+    reset the state variable to True if the current app class does not match.
 
     Args:
         combo_if_true:              The combo to send if _enter_is_F2 is True.
@@ -1185,15 +1224,23 @@ def iEF2(combo_if_true, latch_or_combo_if_false,
     Returns:
         A function that, when called, returns the appropriate combo based on the current
         state of _enter_is_F2 and the provided parameters, and updates _enter_is_F2
-        based on the provided parameters.
+        based on the provided parameters. The current app class is obtained by checking
+        the context object.
 
-    This enables a simulation of the Finder "Enter to rename" capability, allowing
+    This enables a simulation of the macOS Finder's "Enter to rename" capability, allowing
     for complex control over the Enter key's behavior in various scenarios.
     """
-    def _is_Enter_F2():
-        global _enter_is_F2
+    def _is_Enter_F2(ctx: KeyContext):
+        global _enter_is_F2, _enter_F2_last_app_class
+
+        # If last app class that set state to False is not None, and does not match current
+        # app, reset the state var to True for initial behavior in new file manager windows.
+        if _enter_F2_last_app_class and _enter_F2_last_app_class != ctx.wm_class:
+            _enter_is_F2 = True
+            _enter_F2_last_app_class = None
+
         combo_list = [combo_if_true]
-        if latch_or_combo_if_false in (True, False):    # Latch variable to given bool value
+        if latch_or_combo_if_false in (True, False):    # Latch variable to the provided bool value
             _enter_is_F2 = latch_or_combo_if_false
         elif _enter_is_F2:                              # If Enter is F2 now, set to be Enter next
             if keep_value_if_true is False:
@@ -1202,8 +1249,20 @@ def iEF2(combo_if_true, latch_or_combo_if_false,
             combo_list = [latch_or_combo_if_false]
             if keep_value_if_false is False:
                 _enter_is_F2 = True
-        debug(f"_is_Enter_F2:  {combo_list      = }")
-        debug(f"_is_Enter_F2:  {_enter_is_F2    = }")
+
+        # At this point we know whether the state var was set to True or False
+        if not _enter_is_F2:
+            # Record which app set state var to False
+            _enter_F2_last_app_class = ctx.wm_class
+
+        # If state var is currently True, clear last app.
+        elif _enter_is_F2:
+            _enter_F2_last_app_class = None
+
+        debug(f"_is_Enter_F2:               {combo_list      = }")
+        debug(f"_is_Enter_F2:               {_enter_is_F2    = }")
+        debug(f"_enter_F2_last_app_class:   {_enter_F2_last_app_class = }")
+
         return combo_list
     return _is_Enter_F2
 
@@ -1310,7 +1369,7 @@ def notify_context():
         else:
             ctx_dlgs        = False
 
-        message         = ( 
+        message         = (
             f"<tt>"
             f"<b>Class:</b> '{escape_markup(ctx_clas)}' {nwln_str}"
             f"<b>Title:</b> '{escape_markup(ctx_name)}' {nwln_str}"
@@ -1342,7 +1401,7 @@ def notify_context():
             f"</tt>"
         )
 
-        zenity_cmd_lst = [  zenity_cmd, '--info', '--no-wrap', 
+        zenity_cmd_lst = [  zenity_cmd, '--info', '--no-wrap',
                             '--title=Toshy Context Info',
                             '--text=' + message ]
 
@@ -1383,7 +1442,7 @@ def toggle_and_show_capslock_state(ctx: KeyContext):
     No need to return inner closure because not used in conditionals.
     Do not use () to 'call' the function from output macro. Not needed.
 
-    Example usage: 
+    Example usage:
     C("CapsLock"): toggle_and_show_capslock_state, # Toggle CapsLock, show notification
     """
 
@@ -1400,14 +1459,14 @@ def toggle_and_show_numlock_state(ctx: KeyContext):
     Then return the NumLock key combo to toggle the NumLock LED state.
 
     Only shows notification and toggles if 'Forced Numpad' pref is disabled.
-    Like the isNumlockClearKey() function, returns Escape combo if 'Forced 
+    Like the isNumlockClearKey() function, returns Escape combo if 'Forced
     Numpad' feature is enabled. 'Forced Numpad' must be disabled to use
     NumLock key normally and see the notifications.
 
     No need to return inner closure because not used in conditionals.
     Do not use () to 'call' the function from output macro. Not needed.
 
-    Example usage: 
+    Example usage:
     C("NumLock"): toggle_and_show_numlock_state, # Toggle NumLock, show notification
     """
 
@@ -1447,7 +1506,7 @@ def toggle_and_show_numlock_state(ctx: KeyContext):
 ####################################################################################
 # Functions to support proper asyncio time-based multi-tap actions, without
 # blocking the single-tap usage of the same combo (unless desired).
-# 
+#
 # Until this EXPERIMENTAL feature moves into the keymapper, the API function
 # `multitap_config()` will need to be called from a section lower down, like
 # the "user_apps" editable slice, if user wants custom multi-tap timings.
@@ -1578,7 +1637,7 @@ def multitap_config(tap_interval=None, min_tap_delay=None):
 
 def isMultiTap( tap_1_action: Optional[Callable] = None,
                 tap_2_action: Optional[Callable] = None,
-                tap_3_action: Optional[Callable] = None, 
+                tap_3_action: Optional[Callable] = None,
                 tap_4_action: Optional[Callable] = None,
                 tap_5_action: Optional[Callable] = None,
                 tap_interval: float = None,
@@ -1589,7 +1648,7 @@ def isMultiTap( tap_1_action: Optional[Callable] = None,
     Args:
         tap_1_action: Function to call on single tap (can be None to block single-tap)
         tap_2_action: Function to call on double tap
-        tap_3_action: Function to call on triple tap  
+        tap_3_action: Function to call on triple tap
         tap_4_action: Function to call on quadruple tap
         tap_5_action: Function to call on quintuple tap
         tap_interval: Max time between taps (None = use global config)
@@ -1613,7 +1672,7 @@ def isMultiTap( tap_1_action: Optional[Callable] = None,
 
     action_key = (
         make_hashable(tap_1_action),
-        make_hashable(tap_2_action), 
+        make_hashable(tap_2_action),
         make_hashable(tap_3_action),
         make_hashable(tap_4_action),
         make_hashable(tap_5_action)
@@ -1629,7 +1688,7 @@ def isMultiTap( tap_1_action: Optional[Callable] = None,
         """Execute the appropriate action based on tap count."""
         actions = {
             1: tap_1_action,
-            2: tap_2_action, 
+            2: tap_2_action,
             3: tap_3_action,
             4: tap_4_action,
             5: tap_5_action
@@ -1746,7 +1805,7 @@ def isMultiTap( tap_1_action: Optional[Callable] = None,
         if state['tap_1_action'] or state['count'] > 1:
             captured_ctx = state['captured_ctx']
             handle: asyncio.Handle = loop.call_later(
-                tap_interval, 
+                tap_interval,
                 lambda: finalize_taps(action_key, captured_ctx)  # Pass captured context
             )
             state['finalize_handle'] = handle
@@ -1775,10 +1834,10 @@ def isMultiTap( tap_1_action: Optional[Callable] = None,
 
 
 # DO NOT REMOVE THIS MODMAP AND KEYMAP!
-# Special modmap to trigger the evaluation of the keyboard type when 
+# Special modmap to trigger the evaluation of the keyboard type when
 # any modifier key is pressed
-modmap("Keyboard Type Trigger Modmap", {
-    # This modmap must have all modifier keys inside it, so they will 
+modmap("Trigger Modmap: Keyboard Type", {
+    # This modmap must have all modifier keys inside it, so they will
     # all trigger the re-evaluation of the keyboard type.
     # The accompanying keymap can be empty and still accomplish
     # the same purpose of triggering a re-evaluation of the
@@ -1791,12 +1850,52 @@ modmap("Keyboard Type Trigger Modmap", {
     Key.RIGHT_CTRL:             Key.RIGHT_CTRL,
     Key.LEFT_SHIFT:             Key.LEFT_SHIFT,
     Key.RIGHT_SHIFT:            Key.RIGHT_SHIFT,
-}, when = lambda ctx: getKBtype()(ctx) )    # THIS CONDITIONAL MUST EVALUATE TO FALSE ALWAYS!
-# Special keymap to trigger the evaluation of the keyboard type when 
+}, when = lambda ctx: getKBtype()(ctx) )    # THIS CONDITIONAL MUST NEVER EVALUATE TO TRUE!
+# Special keymap to trigger the evaluation of the keyboard type when
 # any non-modifier key is pressed
-keymap("Keyboard Type Trigger Keymap", {
+keymap("Trigger Keymap: Keyboard Type", {
     # Nothing needed here.
 }, when = lambda ctx: getKBtype()(ctx) )
+
+
+def get_iEF2_context():
+    """Reset Enter-to-rename state variable to True, if the current
+        application does not match on the file manager app class string"""
+    def _get_iEF2_context(ctx: KeyContext):
+        global _enter_is_F2, _enter_F2_last_app_class
+        if not _enter_is_F2 and not matchProps(clas=filemanagerStr)(ctx):
+            debug("Resetting Enter-to-rename state variable to True.")
+            _enter_is_F2 = True
+            _enter_F2_last_app_class = None
+
+        return False
+
+    return _get_iEF2_context
+
+
+# DO NOT REMOVE THIS MODMAP AND KEYMAP!
+# Special modmap to trigger the evaluation of the window context when
+# any modifier key is pressed
+modmap("Trigger Modmap: Enter-to-Rename Context", {
+    # This modmap must have all modifier keys inside it, so they will
+    # all trigger the re-evaluation of the window context.
+    # The accompanying keymap can be empty and still accomplish
+    # the same purpose of triggering a re-evaluation of the
+    # window context when any non-modifier key is pressed.
+    Key.LEFT_META:              Key.LEFT_META,
+    Key.RIGHT_META:             Key.RIGHT_META,
+    Key.LEFT_ALT:               Key.LEFT_ALT,
+    Key.RIGHT_ALT:              Key.RIGHT_ALT,
+    Key.LEFT_CTRL:              Key.LEFT_CTRL,
+    Key.RIGHT_CTRL:             Key.RIGHT_CTRL,
+    Key.LEFT_SHIFT:             Key.LEFT_SHIFT,
+    Key.RIGHT_SHIFT:            Key.RIGHT_SHIFT,
+}, when = lambda ctx: get_iEF2_context()(ctx) )    # THIS CONDITIONAL MUST NEVER EVALUATE TO TRUE!
+# Special keymap to trigger the evaluation of the window context when
+# any non-modifier key is pressed
+keymap("Trigger Keymap: Enter-to-Rename Context", {
+    # Nothing needed here.
+}, when = lambda ctx: get_iEF2_context()(ctx) )
 
 
 modmap("Cond modmap - Media Arrows Fix",{
@@ -1843,7 +1942,7 @@ exclude_kpad_devs_UserCustom_lod = locals().get('exclude_kpad_devs_UserCustom_lo
 exclude_kpad_devs_UserCustom_lst = locals().get('exclude_kpad_devs_UserCustom_lod', [])
 
 DEPRECATED_exclude_kpad_devs_UserCustom_lst = [
-    device['devn'] for device in exclude_kpad_devs_UserCustom_lod 
+    device['devn'] for device in exclude_kpad_devs_UserCustom_lod
     if isinstance(exclude_kpad_devs_UserCustom_lod, list)
 ]
 
@@ -1867,7 +1966,7 @@ modmap("Cond modmap - Forced Numpad feature",{
     Key.KP8:                    Key.KEY_8,
     Key.KP9:                    Key.KEY_9,
     Key.KP0:                    Key.KEY_0,
-    Key.KPDOT:                  Key.DOT,  
+    Key.KPDOT:                  Key.DOT,
     Key.KPENTER:                Key.ENTER,
 }, when = lambda ctx:
     cnfg.forced_numpad and
@@ -1881,18 +1980,18 @@ modmap("Cond modmap - GTK3 numpad nav keys fix", {
     # Make numpad nav keys work correctly in GTK3 apps
     # Key.KP5:                    Key.X,                # GTK3 numpad fix - TEST TO SEE IF WORKING
     # Numpad PgUp/PgDn/Home/End keys
-    Key.KP9:                    Key.PAGE_UP, 
-    Key.KP3:                    Key.PAGE_DOWN, 
-    Key.KP7:                    Key.HOME, 
+    Key.KP9:                    Key.PAGE_UP,
+    Key.KP3:                    Key.PAGE_DOWN,
+    Key.KP7:                    Key.HOME,
     Key.KP1:                    Key.END,
     # Numpad arrow keys
-    Key.KP8:                    Key.UP, 
-    Key.KP2:                    Key.DOWN, 
-    Key.KP4:                    Key.LEFT, 
+    Key.KP8:                    Key.UP,
+    Key.KP2:                    Key.DOWN,
+    Key.KP4:                    Key.LEFT,
     Key.KP6:                    Key.RIGHT,
     # Numpad Insert/Delete/Enter keys
-    Key.KP0:                    Key.INSERT, 
-    Key.KPDOT:                  Key.DELETE, 
+    Key.KP0:                    Key.INSERT,
+    Key.KPDOT:                  Key.DELETE,
     Key.KPENTER:                Key.ENTER,
 }, when = lambda ctx:
     not cnfg.forced_numpad and
@@ -1946,12 +2045,12 @@ multipurpose_modmap("Caps2Esc - Chromebook kbd", {
 ###########################
 # Suggestion (untested):
 # For use with keyszer, to avoid catching GNOME Shell task switcher (which has
-# an empty WM_CLASS but sets a WM_NAME): 
+# an empty WM_CLASS but sets a WM_NAME):
 # modmap("Synergy fix", {}, when = lambda ctx: ctx.wm_class == '' and ctx.wm_name == '')
 # If Synergy actually sets a WM_NAME like GNOME Shell does, you'd need to use
 # one of these alternatives:
 # modmap("Synergy fix", {}, when = lambda ctx: ctx.wm_class == '' and ctx.wm_name == 'SYNERGY_WM_NAME')
-# Or: 
+# Or:
 # modmap("Synergy fix", {}, when = lambda ctx: ctx.wm_class == '' and not ctx.wm_name == 'gnome-shell')
 # PROBLEM: When GNOME desktop has focus, it sets no window info at all (no class, no name/title)
 
@@ -1980,7 +2079,7 @@ modmap("Cond modmap - GUI - IBM kbd - multi_lang OFF", {
 }, when = lambda ctx:
     not cnfg.multi_lang and
     cnfg.screen_has_focus and
-    isKBtype('IBM', map='mmap GUI IBM ML-OFF')(ctx) and 
+    isKBtype('IBM', map='mmap GUI IBM ML-OFF')(ctx) and
     matchProps(not_clas=terms_and_remotes_Str)(ctx)
 )
 modmap("Cond modmap - GUI - IBM kbd", {
@@ -2173,7 +2272,7 @@ modmap("Cond modmap - Terms - Mac kbd", {
 
 # Force the numpad to always be a numpad, like a Mac keyboard on macOS
 # Numlock key becomes "Clear" key for use with calculator (sends Escape)
-# Toggle feature on/off with Option+Numlock (Fn+Numlock might work on 
+# Toggle feature on/off with Option+Numlock (Fn+Numlock might work on
 # Apple keyboards that have Fn key)
 
 
@@ -2204,7 +2303,7 @@ def isNumlockClearKey():
 
 ###########   START OF OPTION KEY SPECIAL CHARACTER ENTRY SCHEME    #############
 #################################################################################
-### Full list of special characters on Apple US and ABC Extended keyboard layouts: 
+### Full list of special characters on Apple US and ABC Extended keyboard layouts:
 ### https://github.org/RedBearAK/optspecialchars
 
 
@@ -2234,9 +2333,9 @@ _ac_Chr_copy = None
 
 def set_dead_key_char(hex_unicode_addr):
     """
-    Set the value of the dead keys accent character 
+    Set the value of the dead keys accent character
     variable, and its alternate. Does not clear the
-    value of the alternate variable if input is 
+    value of the alternate variable if input is
     falsy (such as None or 0x0000 or 0). This allows
     the value to be used after the tripwire keymap
     clears the main variable value.
@@ -2255,7 +2354,7 @@ def set_dead_key_char(hex_unicode_addr):
 
 
 def get_dead_key_char():
-    """Get the value of the alternate dead key accent character 
+    """Get the value of the alternate dead key accent character
         variable, and print/type the resulting Unicode character."""
     def _get_dead_key_char():
         global _ac_Chr_copy
@@ -2591,7 +2690,7 @@ keymap("DK-ABC - Inverted Breve", {
     # Shift+Option+S            {U+0311}    [uses {U+1D16} as a substitute]
     # Valid keys:
     # a e i o r u
-    # A E I O R U 
+    # A E I O R U
     C("A"):                     UC(0x0203),                     # ȃ Latin Small Letter A with Inverted Breve
     C("E"):                     UC(0x0207),                     # ȇ Latin Small Letter E with Inverted Breve
     C("I"):                     UC(0x020B),                     # ȋ Latin Small Letter I with Inverted Breve
@@ -2642,25 +2741,25 @@ keymap("DK-ABC - Low Macron/Line Below", {
     # Option+H                  {U+02CD}
     # Valid keys:
     # b d h k l n r t z
-    # B D H K L N R T Z 
-    C("B"):                     UC(0x1E07),                     # ḇ Latin Small Letter B with Line Below 
-    C("D"):                     UC(0x1E0F),                     # ḏ Latin Small Letter D with Line Below 
-    C("H"):                     UC(0x1E96),                     # ẖ Latin Small Letter H with Line Below 
-    C("K"):                     UC(0x1E35),                     # ḵ Latin Small Letter K with Line Below 
-    C("L"):                     UC(0x1E3B),                     # ḻ Latin Small Letter L with Line Below 
-    C("N"):                     UC(0x1E49),                     # ṉ Latin Small Letter N with Line Below 
-    C("R"):                     UC(0x1E5F),                     # ṟ Latin Small Letter R with Line Below 
-    C("T"):                     UC(0x1E6F),                     # ṯ Latin Small Letter T with Line Below 
-    C("Z"):                     UC(0x1E95),                     # ẕ Latin Small Letter Z with Line Below 
-    C("Shift-B"):               UC(0x1E06),                     # Ḇ Latin Capital Letter B with Line Below 
-    C("Shift-D"):               UC(0x1E0E),                     # Ḏ Latin Capital Letter D with Line Below 
+    # B D H K L N R T Z
+    C("B"):                     UC(0x1E07),                     # ḇ Latin Small Letter B with Line Below
+    C("D"):                     UC(0x1E0F),                     # ḏ Latin Small Letter D with Line Below
+    C("H"):                     UC(0x1E96),                     # ẖ Latin Small Letter H with Line Below
+    C("K"):                     UC(0x1E35),                     # ḵ Latin Small Letter K with Line Below
+    C("L"):                     UC(0x1E3B),                     # ḻ Latin Small Letter L with Line Below
+    C("N"):                     UC(0x1E49),                     # ṉ Latin Small Letter N with Line Below
+    C("R"):                     UC(0x1E5F),                     # ṟ Latin Small Letter R with Line Below
+    C("T"):                     UC(0x1E6F),                     # ṯ Latin Small Letter T with Line Below
+    C("Z"):                     UC(0x1E95),                     # ẕ Latin Small Letter Z with Line Below
+    C("Shift-B"):               UC(0x1E06),                     # Ḇ Latin Capital Letter B with Line Below
+    C("Shift-D"):               UC(0x1E0E),                     # Ḏ Latin Capital Letter D with Line Below
     C("Shift-H"):              [UC(0x0048),UC(0x0331)],         # H̱ Latin Capital Letter H with Line Below
-    C("Shift-K"):               UC(0x1E34),                     # Ḵ Latin Capital Letter K with Line Below 
-    C("Shift-L"):               UC(0x1E3A),                     # Ḻ Latin Capital Letter L with Line Below 
-    C("Shift-N"):               UC(0x1E48),                     # Ṉ Latin Capital Letter N with Line Below 
-    C("Shift-R"):               UC(0x1E5E),                     # Ṟ Latin Capital Letter R with Line Below 
-    C("Shift-T"):               UC(0x1E6E),                     # Ṯ Latin Capital Letter T with Line Below 
-    C("Shift-Z"):               UC(0x1E94),                     # Ẕ Latin Capital Letter Z with Line Below 
+    C("Shift-K"):               UC(0x1E34),                     # Ḵ Latin Capital Letter K with Line Below
+    C("Shift-L"):               UC(0x1E3A),                     # Ḻ Latin Capital Letter L with Line Below
+    C("Shift-N"):               UC(0x1E48),                     # Ṉ Latin Capital Letter N with Line Below
+    C("Shift-R"):               UC(0x1E5E),                     # Ṟ Latin Capital Letter R with Line Below
+    C("Shift-T"):               UC(0x1E6E),                     # Ṯ Latin Capital Letter T with Line Below
+    C("Shift-Z"):               UC(0x1E94),                     # Ẕ Latin Capital Letter Z with Line Below
 }, when = lambda _: ac_Chr_main == 0x02CD and cnfg.optspec_layout == 'ABC')
 
 keymap("DK-ABC - Double Acute", {
@@ -2678,7 +2777,7 @@ keymap("DK-ABC - Ring Above", {
     # Option+K                  {U+02DA}
     # Valid keys:
     # a e o u w y
-    # A E O U W Y 
+    # A E O U W Y
     C("A"):                     UC(0x00E5),                     # å Latin Small Letter A with Ring Above
     C("E"):                    [UC(0x0065),UC(0x030A)],         # e̊ Latin Small Letter E with Ring Above
     C("O"):                    [UC(0x006F),UC(0x030A)],         # o̊ Latin Small Letter O with Ring Above
@@ -2697,7 +2796,7 @@ keymap("DK-ABC - Stroke/Hyphen-Minus", {
     # Option+L                  {U+002D}
     # Valid keys:
     # b d g h i l o t u z
-    #   D G H I L O T   Z 
+    #   D G H I L O T   Z
     C("B"):                     UC(0x0180),                     # ƀ Latin Small Letter B with Stroke
     C("D"):                     UC(0x0111),                     # đ Latin Small Letter D with Stroke
     C("G"):                     UC(0x01E5),                     # ǥ Latin Small Letter G with Stroke
@@ -2729,7 +2828,7 @@ keymap("DK-ABC - Numero Sign", {
     C("5"):                     UC(0x01BD),                     # ƽ  Latin Small Letter Tone Five
     C("2"):                     UC(0x01A8),                     # ƨ  Latin Small Letter Tone Two
     C("6"):                     UC(0x0185),                     # ƅ  Latin Small Letter Tone Six
-    C("7"):                     UC(0x204A),                     # ⁊  Tironian Sign Et 
+    C("7"):                     UC(0x204A),                     # ⁊  Tironian Sign Et
     C("8"):                     UC(0x0223),                     # ȣ  Latin Small Letter Ou
     C("Shift-2"):               UC(0x01A7),                     # Ƨ  Latin Capital Letter Tone Two
     C("Shift-3"):               UC(0x0190),                     # Ɛ  Latin Capital Letter Open E
@@ -2774,7 +2873,7 @@ keymap("DK-ABC - Hook Above/Glottal Stop", {
     # Option+Z                  {U+02C0}
     # Valid keys:
     # a e i o u y
-    # A E I O U Y 
+    # A E I O U Y
     C("A"):                     UC(0x1EA3),                     # ả  Latin Small Letter A with Hook Above
     C("E"):                     UC(0x1EBB),                     # ẻ  Latin Small Letter E with Hook Above
     C("I"):                     UC(0x1EC9),                     # ỉ  Latin Small Letter I with Hook Above
@@ -2793,7 +2892,7 @@ keymap("DK-ABC - Dot Below", {
     # Option+X                  {U+002E}
     # Valid keys:
     # a b d e h i k l m n o r s t u v w y z
-    # A B D E H I K L M N O R S T U V W Y Z 
+    # A B D E H I K L M N O R S T U V W Y Z
     C("A"):                     UC(0x1EA1),                     # ạ Latin Small Letter A with Dot Below
     C("B"):                     UC(0x1E05),                     # ḅ Latin Small Letter B with Dot Below
     C("D"):                     UC(0x1E0D),                     # ḍ Latin Small Letter D with Dot Below
@@ -2838,7 +2937,7 @@ keymap("DK-ABC - Cedilla/Cedille", {
     # Option+C                  {U+00B8}
     # Valid keys:
     # c d e g h k l n r s t z
-    # C D E G H K L N R S T Z 
+    # C D E G H K L N R S T Z
     C("C"):                     UC(0x00E7),                     # ç Latin Small Letter C with Cedilla
     C("D"):                     UC(0x1E11),                     # ḑ Latin Small Letter D with Cedilla
     C("E"):                     UC(0x0229),                     # ȩ Latin Small Letter E with Cedilla
@@ -2869,7 +2968,7 @@ keymap("DK-ABC - Caron/hacek", {
     # Option+V                  {U+02C7}
     # Valid keys:
     # a c d e g h i j k l n o r s t u v x z
-    # A C D E G H I J K L N O R S T U V X Z 
+    # A C D E G H I J K L N O R S T U V X Z
     C("A"):                     UC(0x01CE),                     # ǎ Latin Small Letter A with Caron
     C("C"):                     UC(0x010D),                     # č Latin Small Letter C with Caron
     C("D"):                     UC(0x010F),                     # ď Latin Small Letter D with Caron
@@ -2914,7 +3013,7 @@ keymap("DK-ABC - Breve", {
     # Option+B                  {U+02D8}
     # Valid keys:
     # a e g h i o u
-    # A E G H I O U 
+    # A E G H I O U
     C("A"):                     UC(0x0103),                     # ă Latin Small Letter A with Breve
     C("E"):                     UC(0x0115),                     # ĕ Latin Small Letter E with Breve
     C("G"):                     UC(0x011F),                     # ğ Latin Small Letter G with Breve
@@ -2935,7 +3034,7 @@ keymap("DK-ABC - Tilde", {
     # Option+N                  {U+02DC}
     # Valid keys:
     # a e i n o u v y
-    # A E I N O U V Y 
+    # A E I N O U V Y
     C("A"):                     UC(0x00E3),                     # ã Latin Small Letter A with Tilde
     C("E"):                     UC(0x1EBD),                     # ẽ Latin Small Letter E with Tilde
     C("I"):                     UC(0x0129),                     # ĩ Latin Small Letter I with Tilde
@@ -2958,7 +3057,7 @@ keymap("DK-ABC - Ogonek", {
     # Option+M                  {U+02DB}
     # Valid keys:
     # a e i o u
-    # A E I O U 
+    # A E I O U
     C("A"):                     UC(0x0105),                     # ą Latin Small Letter A with Ogonek
     C("E"):                     UC(0x0119),                     # ę Latin Small Letter E with Ogonek
     C("I"):                     UC(0x012F),                     # į Latin Small Letter I with Ogonek
@@ -2974,8 +3073,8 @@ keymap("DK-ABC - Ogonek", {
 keymap("DK-ABC - Hook", {
     # Shift+Option+Dot          {U+0294}
     # Valid keys:
-    # b c d f g h i k n p q r s t u x y z 
-    # B C D F G   I K N P   R S T U X Y Z 
+    # b c d f g h i k n p q r s t u x y z
+    # B C D F G   I K N P   R S T U X Y Z
     C("B"):                     UC(0x0253),                     # ɓ Latin Small Letter B with Hook
     C("C"):                     UC(0x0188),                     # ƈ Latin Small Letter C with Hook
     C("D"):                     UC(0x0257),                     # ɗ Latin Small Letter D with Hook
@@ -3583,8 +3682,8 @@ keymap("OptSpecialChars - US", {
     C("Shift-Alt-H"):           UC(0x00D3),                     # Ó Latin Capital Letter O with Acute
     C("Shift-Alt-J"):           UC(0x00D4),                     # Ô Latin Capital Letter O with Circumflex
     #########################################################################################################
-    # The Apple logo is at {U+F8FF} in a Unicode Private Use Area. Only at that location in Mac fonts. 
-    # Symbol exists at {U+F000} in Baskerville Old Face font. 
+    # The Apple logo is at {U+F8FF} in a Unicode Private Use Area. Only at that location in Mac fonts.
+    # Symbol exists at {U+F000} in Baskerville Old Face font.
     C("Shift-Alt-K"):   [apple_logo_alert,UC(0xF000)],          #  Apple logo [req's Baskerville Old Face font]
     C("Shift-Alt-L"):           UC(0x00D2),                     # Ò Latin Capital Letter O with Grave
     C("Shift-Alt-Semicolon"):   UC(0x00DA),                     # Ú Latin Capital Letter U with Acute
@@ -3637,11 +3736,11 @@ keymap("OptSpecialChars - US", {
 ###                                                                                ###
 ###                                                                                ###
 ######################################################################################
-### This is a good location in the config file for adding new custom keymaps for 
-### user applications and custom function keys. Watch out that you don't override 
-### any "general" shortcuts like Cmd+Z/X/C/V that may be defined below this section. 
-### Changes made between the "slice" marks will be retained by the Toshy installer 
-### if you reinstall and it finds matching start/end markers for each section. 
+### This is a good location in the config file for adding new custom keymaps for
+### user applications and custom function keys. Watch out that you don't override
+### any "general" shortcuts like Cmd+Z/X/C/V that may be defined below this section.
+### Changes made between the "slice" marks will be retained by the Toshy installer
+### if you reinstall and it finds matching start/end markers for each section.
 
 ###################################################################################################
 ###  SLICE_MARK_START: user_apps  ###  EDITS OUTSIDE THESE MARKS WILL BE LOST ON UPGRADE
@@ -3662,10 +3761,10 @@ keymap("User hardware keys", {
 
 
 # HOW TO SWAP CMD+SPACE AND CTRL+SPACE (SPOTLIGHT EQUIVALENT VS INPUT SWITCHING)
-# Copy this entire block into the "user_apps" editable slice markers, and 
-# uncomment everything below this text. Fix the output shortcuts to work on your 
-# chosen desktop environment. 
-# 
+# Copy this entire block into the "user_apps" editable slice markers, and
+# uncomment everything below this text. Fix the output shortcuts to work on your
+# chosen desktop environment.
+#
 # keymap("User overrides terminals", {
 #     C("LC-Space"):              [iEF2NT(),C("THE-REAL-COMBO-FOR-SOME-LAUNCHER")],    # Spotlight equivalent
 #     C("Shift-LC-Space"):        None,    # block the default general terminals shortcut for input switching
@@ -3725,8 +3824,8 @@ keymap("Transmission bittorrent client", {
     matchProps(clas=transmissionStr)(ctx) )
 
 keymap("JDownloader", {
-    # Fixes for tab navigation done here instead of in the main tab nav fix keymaps, 
-    # because we have to use a "list of dicts" to match some  JDownloader windows. 
+    # Fixes for tab navigation done here instead of in the main tab nav fix keymaps,
+    # because we have to use a "list of dicts" to match some  JDownloader windows.
     C("Shift-RC-Left_Brace"):  [bind,C("C-Shift-Tab")],         # Tab nav: Go to prior tab (left)
     C("Shift-RC-Right_Brace"): [bind,C("C-Tab")],               # Tab nav: Go to next tab (right)
     C("Shift-RC-Left"):        [bind,C("C-Shift-Tab")],         # Tab nav: Go to prior tab (left)
@@ -3859,7 +3958,7 @@ keymap("Overrides for Dolphin - Finder Mods", {
     cnfg.screen_has_focus and
     matchProps(clas="^dolphin$|^org.kde.dolphin$")(ctx) )
 
-# 
+#
 ###########################  DOLPHIN KEYMAPS - END  ###########################
 
 
@@ -3899,7 +3998,7 @@ keymap("Overrides for Nautilus Create Archive dialog - Finder Mods", {
 keymap("Overrides for Nautilus - Finder Mods", {
     # Optional "new window at home folder" in Nautilus
     # C("RC-N"):                  C("C-Alt-Space"),               # macOS Finder search window shortcut Cmd+Option+Space
-    # For the above shortcut to work, a custom shortcut bound to Ctrl+Alt+Space must be set up in the 
+    # For the above shortcut to work, a custom shortcut bound to Ctrl+Alt+Space must be set up in the
     # Settings app in GNOME to run command: "nautilus --new-window /home/USER" [ replace "USER" ]
     C("RC-KEY_1"):              C("C-KEY_2"),                   # View as Icons
     C("RC-KEY_2"):              C("C-KEY_1"),                   # View as List (Detailed)
@@ -3997,7 +4096,7 @@ keymap("Overrides for Thunar - Finder Mods", {
 # Keybindings overrides for GNOME XDG "Save As" and "Open File" dialogs
 file_open_save_dialogs = [
     {
-        clas: "^xdg-desktop-portal-gnome$|^Firefox.*$|^LibreWolf$|^Waterfox$|^zen.*$", 
+        clas: "^xdg-desktop-portal-gnome$|^Firefox.*$|^LibreWolf$|^Waterfox$|^zen.*$",
         name: "^Open File$|^Save As$"
     },
 ]
@@ -4015,7 +4114,7 @@ keymap("XDG file dialogs", {
 ##  Keybindings for Linux general file managers group:
 ##
 ##  Currently supported Linux file managers (file browsers):
-##  
+##
 ##  Caja File Browser       (MATE file manager, fork of Nautilus)
 ##  COSMIC Files            (Pop!_OS COSMIC desktop environment file manager)
 ##  DDE File Manager        (Deepin Linux file manager)
@@ -4029,9 +4128,9 @@ keymap("XDG file dialogs", {
 ##  Peony-Qt                (UKUI file manager, found in Ubuntu Kylin)
 ##  SpaceFM                 (Fork of PCManFM file manager)
 ##  Thunar File Manager     (Xfce file manager)
-##  
+##
 ##  GNOME XDG file dialogs ("Open File" and "Save As" windows in apps like Firefox)
-## 
+##
 ####################################################################################################
 
 keymap("General File Managers - Finder Mods", {
@@ -4108,15 +4207,34 @@ keymap("General File Managers - Finder Mods", {
 ####################################################################################
 
 keymap("Firefox Browsers Overrides", {
+
     C("C-comma"):              [C("C-t"), sleep(0.2),
                                 ST("about:preferences"),
-                                sleep(0.2), C("Enter")],            # Open preferences (Settings)
-    C("Shift-RC-N"):            C("Shift-C-P"),                     # Open private window with Cmd+Shift+N like other browsers
-    C("RC-Backspace"):         [C("Shift-Home"), C("Backspace")],   # Delete Entire Line Left of Cursor
-    C("RC-Delete"):            [C("Shift-End"), C("Delete")],       # Delete Entire Line Right of Cursor
+                                sleep(0.2), C("Enter")],        # Open preferences (Settings)
+
+    # Open private window with Cmd+Shift+N like other browsers
+    C("Shift-RC-N"):            C("Shift-C-P"),
+
+    # Wordwise shortcuts (overrides of general wordwise)
+    C("RC-Backspace"):         [C("Shift-Home"),
+                                C("Backspace")],                # Delete Line Left of Cursor
+    C("RC-Delete"):            [C("Shift-End"), C("Delete")],   # Delete Line Right of Cursor
+
+    # Specific numbered tab navigation - removed from general browsers keymap
+    C("RC-1"):                  C("Alt-1"),                     # Jump to Tab #1
+    C("RC-2"):                  C("Alt-2"),                     # Jump to Tab #2
+    C("RC-3"):                  C("Alt-3"),                     # Jump to Tab #3
+    C("RC-4"):                  C("Alt-4"),                     # Jump to Tab #4
+    C("RC-5"):                  C("Alt-5"),                     # Jump to Tab #5
+    C("RC-6"):                  C("Alt-6"),                     # Jump to Tab #6
+    C("RC-7"):                  C("Alt-7"),                     # Jump to Tab #7
+    C("RC-8"):                  C("Alt-8"),                     # Jump to Tab #8
+    C("RC-9"):                  C("Alt-9"),                     # Jump to last tab
+
     # Block shortcuts that might get confused with Shift+Cmd+[Left/Right]_Brace
-    C("Shift-RC-Minus"):        ignore_combo,                       # Ignore alternate zoom out shortcut
-    C("Shift-RC-Equal"):        ignore_combo,                       # Ignore alternate zoom in shortcut
+    C("Shift-RC-Minus"):        ignore_combo,                   # Ignore alternate zoom out shortcut
+    C("Shift-RC-Equal"):        ignore_combo,                   # Ignore alternate zoom in shortcut
+
 }, when = lambda ctx:
     cnfg.screen_has_focus and
     matchProps(clas=browsers_firefoxStr)(ctx) )
@@ -4128,7 +4246,6 @@ keymap("Zotero", {
 }, when = lambda ctx:
     cnfg.screen_has_focus and
     matchProps(clas="^.*Zotero.*$")(ctx) )
-
 
 keymap("Vivaldi browser - Settings dialog", {
     C("Esc"):                   C("Alt-F4"),                    # Close Settings dialog with Escape
@@ -4155,17 +4272,6 @@ keymap("Overrides for Vivaldi browser", {
 
     C("C-comma"):              [C("F10"),
                                 sleep(0.2), C("S")],            # Open preferences (Settings)
-
-    # Browser tab switching
-    C("RC-1"):                  C("C-1"),                       # Jump to Tab #1
-    C("RC-2"):                  C("C-2"),                       # Jump to Tab #2
-    C("RC-3"):                  C("C-3"),                       # Jump to Tab #3
-    C("RC-4"):                  C("C-4"),                       # Jump to Tab #4
-    C("RC-5"):                  C("C-5"),                       # Jump to Tab #5
-    C("RC-6"):                  C("C-6"),                       # Jump to Tab #6
-    C("RC-7"):                  C("C-7"),                       # Jump to Tab #7
-    C("RC-8"):                  C("C-8"),                       # Jump to Tab #8
-    C("RC-9"):                  C("C-9"),                       # Jump to last tab
 
 }, when = lambda ctx:
     cnfg.screen_has_focus and
@@ -4198,30 +4304,27 @@ keymap("Chrome Browsers Overrides", {
 
 # Keybindings for General Web Browsers
 keymap("General Web Browsers", {
+
     C("RC-Q"):                  C("C-Q"),                       # Close all browsers Instances
     C("Alt-RC-I"):              C("Shift-C-I"),                 # Dev tools
     C("Alt-RC-J"):              C("Shift-C-J"),                 # Dev tools
-    C("RC-1"):                  C("Alt-1"),                     # Jump to Tab #1
-    C("RC-2"):                  C("Alt-2"),                     # Jump to Tab #2
-    C("RC-3"):                  C("Alt-3"),                     # Jump to Tab #3
-    C("RC-4"):                  C("Alt-4"),                     # Jump to Tab #4
-    C("RC-5"):                  C("Alt-5"),                     # Jump to Tab #5
-    C("RC-6"):                  C("Alt-6"),                     # Jump to Tab #6
-    C("RC-7"):                  C("Alt-7"),                     # Jump to Tab #7
-    C("RC-8"):                  C("Alt-8"),                     # Jump to Tab #8
-    C("RC-9"):                  C("Alt-9"),                     # Jump to last tab
+
     # Enable Cmd+Shift+Braces for tab navigation (redundant with General GUI)
     # C("Shift-RC-Left_Brace"):   C("C-Page_Up"),                 # Go to prior tab
     # C("Shift-RC-Right_Brace"):  C("C-Page_Down"),               # Go to next tab
+
     # Enable Cmd+Option+Left/Right for tab navigation
     C("RC-Alt-Left"):           C("C-Page_Up"),                 # Go to prior tab
     C("RC-Alt-Right"):          C("C-Page_Down"),               # Go to next tab
+
     # Enable Ctrl+PgUp/PgDn for tab navigation
     C("Super-Page_Up"):         C("C-Page_Up"),                 # Go to prior tab
     C("Super-Page_Down"):       C("C-Page_Down"),               # Go to next tab
-    # Use Cmd+Braces keys for tab navigation instead of page navigation 
+
+    # Use Cmd+Braces keys for tab navigation instead of page navigation
     # C("C-Left_Brace"):        C("C-Page_Up"),
     # C("C-Right_Brace"):       C("C-Page_Down"),
+
 }, when = lambda ctx:
     cnfg.screen_has_focus and
     matchProps(clas=browsers_allStr)(ctx) )
@@ -4375,8 +4478,8 @@ keymap("VSCodes overrides for not Chromebook/IBM - Sublime", {
 }, when = lambda ctx:
     cnfg.screen_has_focus and
     cnfg.ST3_in_VSCode and
-    not ( isKBtype('Chromebook', map="vscodes ovr not cbook - sublime")(ctx) or 
-    isKBtype('IBM', map="vscodes ovr not ibm - sublime")(ctx) ) and 
+    not ( isKBtype('Chromebook', map="vscodes ovr not cbook - sublime")(ctx) or
+    isKBtype('IBM', map="vscodes ovr not ibm - sublime")(ctx) ) and
     matchProps(clas=vscodeStr)(ctx)
 )
 keymap("VSCodes overrides for Chromebook/IBM", {
@@ -4384,7 +4487,7 @@ keymap("VSCodes overrides for Chromebook/IBM", {
     C("Alt-x"):                 C("C-x"),                       #  Chromebook/IBM - Terminal - Exit nano
 }, when = lambda ctx:
     cnfg.screen_has_focus and
-    (   isKBtype('Chromebook', map="vscodes ovr cbook")(ctx) or 
+    (   isKBtype('Chromebook', map="vscodes ovr cbook")(ctx) or
         isKBtype('IBM', map="vscodes ovr ibm")(ctx) ) and
     matchProps(clas=vscodeStr)(ctx)
 )
@@ -4402,6 +4505,14 @@ keymap("VSCodes", {
 
     # Override the global Cmd+Dot (Escape/cancel) shortcut for QuickFix in VSCode(s)
     C("RC-Dot"):                C("C-Dot"),                     # QuickFix, overriding global shortcut
+
+    # Override the global copy shortcut, to allow Cmd+C to work properly in the embedded
+    # VSCode terminal, without an internal VSCode keyboard shortcut remap.
+    C("RC-C"):                 C("C-Insert"),                   # Copy
+
+    # This override unfortunately seems to paste from the "wrong" clipboard. Only pastes content
+    # that was copied from within the VSCode window, not content copied from other app windows:
+    # C("RC-V"):                 C("Shift-Insert"),               # Paste
 
     # In-app terminal operations (Cmd+J is "Toggle Panel Visibility" for problems/output/debug/terminal panel)
     C("Super-Grave"):           C("C-Grave"),                   # Terminal: Toggle Terminal
@@ -4475,7 +4586,7 @@ keymap("Sublime Text overrides for Chromebook/IBM", {
     C("Alt-C-g"):               C("Alt-Refresh"),               # Chromebook/IBM - find_all_under
 }, when = lambda ctx:
     cnfg.screen_has_focus and
-    (   isKBtype('Chromebook', map="sublime ovr cbook")(ctx) or 
+    (   isKBtype('Chromebook', map="sublime ovr cbook")(ctx) or
         isKBtype('IBM', map="sublime ovr ibm")(ctx) ) and
     matchProps(clas=sublimeStr)(ctx)
 )
@@ -4486,7 +4597,7 @@ keymap("Sublime Text overrides for not Chromebook/IBM", {
     C("Super-C-g"):             C("Alt-f3"),                    # Default - find_all_under
 }, when = lambda ctx:
     cnfg.screen_has_focus and
-    not (   isKBtype('Chromebook', map="sublime ovr not cbook")(ctx) or 
+    not (   isKBtype('Chromebook', map="sublime ovr not cbook")(ctx) or
             isKBtype('IBM', map="sublime ovr not ibm")(ctx) ) and
     matchProps(clas=sublimeStr)(ctx)
 )
@@ -4583,10 +4694,12 @@ keymap("KWrite text editor - Close Document dialog", {
     matchProps(clas="^kwrite$|^org.kde.Kwrite$", name="^Close Document.*KWrite$")(ctx) )
 keymap("KWrite text editor", {
     C("RC-comma"):              C("Shift-C-comma"),             # Open preferences dialog
-    C("RC-t"):                  C("C-n"),                       # New tab (new document)
+    C("RC-t"):                  C("C-n"),                       # New tab (new document appears in tab)
     C("Super-g"):               C("C-g"),                       # Go to line with physical Ctrl+G
     C("RC-g"):                  C("F3"),                        # Find next instance (Cmd+G)
     C("Shift-RC-g"):            C("Shift-F3"),                  # Find previous instance (Shift+Cmd+G)
+    # wordwise shortcuts
+    C("RC-Backspace"):          C("C-k"),                       # Delete line (Cmd+Delete)
 }, when = lambda ctx:
     cnfg.screen_has_focus and
     matchProps(clas="^kwrite$|^org.kde.Kwrite$")(ctx) )
@@ -4610,16 +4723,16 @@ keymap("GNOME Text Editor", {
 ###                                                                ###
 ###                                                                ###
 ######################################################################
-### Fixes for the problem of modal dialogs and other "child" 
+### Fixes for the problem of modal dialogs and other "child"
 ### windows failing to close with Cmd+W.
-### Many dialogs respond to the Escape key, others may require the 
+### Many dialogs respond to the Escape key, others may require the
 ### "Close window" shortcut (normally Alt+F4 but not always) to close.
-### 
-### Cmd+W can't just be always mapped to the "Close window" shortcut for all apps 
+###
+### Cmd+W can't just be always mapped to the "Close window" shortcut for all apps
 ### because some apps will "quit" rather than just closing a tab.
-### 
-### To add window conditions to the list, search for the list names in 
-### the "LISTS" section near the top of this config file. 
+###
+### To add window conditions to the list, search for the list names in
+### the "LISTS" section near the top of this config file.
 ### dialogs_Escape_lod = send these windows the Escape key for Cmd+W
 ### dialogs_CloseWin_lod = send these windows the "Close window" shortcut for Cmd+W
 
@@ -4742,6 +4855,13 @@ keymap("Alacritty terminal", {
     matchProps(clas="^alacritty$")(ctx) )
 
 
+keymap("Contour terminal overrides", {
+    C("RC-minus"):              C("Shift-C-minus"),             # Decrease font size (override general terminals remap)
+}, when = lambda ctx:
+    cnfg.screen_has_focus and
+    matchProps(clas="^contour$")(ctx) )
+
+
 keymap("COSMIC Terminal overrides", {
     # There are already tab nav fixes in the usual place.
     C("RC-equal"):              C("C-equal"),                   # Increase font size (override general terminals remap)
@@ -4752,22 +4872,25 @@ keymap("COSMIC Terminal overrides", {
 
 keymap("Deepin Terminal overrides", {
     C("RC-w"):                  C("Alt-w"),                     # Close only current tab, instead of all other tabs
-    C("RC-j"):                  None,                           # Block Cmd+J from remapping to vertical split (Ctrl+Shift+J) 
-    C("RC-minus"):              C("C-minus"),                   # Decrease font size/zoom out 
+    C("RC-j"):                  None,                           # Block Cmd+J from remapping to vertical split (Ctrl+Shift+J)
+    C("RC-minus"):              C("C-minus"),                   # Decrease font size/zoom out
     C("RC-equal"):              C("C-equal"),                   # Increase font size/zoom in
 }, when = lambda ctx:
     cnfg.screen_has_focus and
     matchProps(clas="^deepin-terminal$")(ctx) )
 
 keymap("Ghostty terminal overrides", {
-    C("RC-Equal"):              C("C-Equal"),                   # Increase font size [override general terminals remap]
+    C("RC-Equal"): C(
+        "C-Equal"
+    ),              # Increase font size [override general terminals remap]
     C("RC-D"):                  C("RC-Shift-O"),                # Open right split
     C("RC-Shift-D"):            C("RC-Shift-E"),                # Open down split
     C("RC-Alt-I"):              C("RC-Shift-I"),                # Open inspector
     C("RC-K"):                  C("C-L"),                       # clear log
 }, when = lambda ctx:
     cnfg.screen_has_focus and
-    matchProps(clas="^ghostty$|^ghostty-debug$|^com.mitchellh.ghostty$")(ctx) )
+    matchProps(clas="^.*ghostty.*$")(ctx)
+)
 
 keymap("Hyper terminal tab switching", {
     C("RC-Equal"):              C("C-Equal"),                   # Increase font size [override general terminals remap]
@@ -5042,7 +5165,7 @@ keymap("GenGUI overrides: Chromebook/IBM", {
     C("LAlt-Backspace"):        C("C-Backspace"),                   # Chromebook/IBM - Delete Left Word of Cursor
 }, when = lambda ctx:
     cnfg.screen_has_focus and
-    (   isKBtype('Chromebook', map="gengui ovr cbook")(ctx) or 
+    (   isKBtype('Chromebook', map="gengui ovr cbook")(ctx) or
         isKBtype('IBM', map="gengui ovr ibm")(ctx) ) and
     matchProps(not_clas=remoteStr)(ctx)
 )
