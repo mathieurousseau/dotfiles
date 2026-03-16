@@ -16,6 +16,7 @@ return {
     notifier = { enabled = true },
     quickfile = { enabled = true },
     scope = { enabled = true },
+    image = { enabled = true },
     scroll = {
       enabled = true, ---@class snacks.scroll.Config
       ---@field animate snacks.animate.Config|{}

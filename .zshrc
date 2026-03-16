@@ -205,6 +205,9 @@ else
   alias ls='gls --group-directories-first --color=auto'
 fi
 
+git config --global alias.prune-gone '!git fetch --prune && git for-each-ref --format='"'"'%(refname:short) %(upstream:track)'"'"' refs/heads | awk '"'"'$2=="[gone]" && $1!="main" && $1!="master" && $1!="develop" {print $1}'"'"' | xargs -r git branch -d'
+
+git config --global alias.list-gone '!git fetch --prune && git for-each-ref --format='"'"'%(refname:short) %(upstream:track)'"'"' refs/heads | awk '"'"'$2=="[gone]" && $1!="main" && $1!="master" && $1!="develop" {print $1}'"'"''
 
 if [ $USER = "Mathieu.Rousseau" ]; then
   cat << "EOF"
@@ -247,6 +250,8 @@ alias g_check='./gradlew spotlessCheck'
 alias g_apply='./gradlew spotlessApply'
 alias g_run='./gradlew quarkusDev'
 alias g_test='./gradlew test'
+
+alias lstr="ls -ltr"
 
 export PATH=$PATH:/opt/homebrew/opt/mysql-client/bin
 # export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
