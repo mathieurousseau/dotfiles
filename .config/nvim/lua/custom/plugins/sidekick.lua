@@ -3,9 +3,23 @@ return {
   opts = {
     -- add any options here
     cli = {
+      -- win = {
+      --   keys = {
+      --     nav_down = false,
+      --   },
+      -- },
       mux = {
-        backend = "zellij",
+        backend = "tmux",
         enabled = true,
+      },
+      tools = {
+        claude = {
+          native_scroll = true,
+        },
+        codex = {
+          native_scroll = true,
+        }
+
       },
     },
   },
