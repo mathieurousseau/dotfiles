@@ -1,3 +1,7 @@
+local function picker_main_opts()
+  return vim.bo.filetype == "oil" and { main = { current = true } } or {}
+end
+
 return {
   "folke/snacks.nvim",
   priority = 1000,
@@ -43,7 +47,7 @@ return {
   },
   keys = {
     -- Top Pickers & Explorer
-    { "<leader><space>", function() Snacks.picker.smart({ filter = { cwd = true } }) end,        desc = "Smart Find Files" },
+    { "<leader><space>", function() Snacks.picker.smart(vim.tbl_deep_extend("force", { filter = { cwd = true } }, picker_main_opts())) end, desc = "Smart Find Files" },
     { "<leader>,",       function() Snacks.picker.buffers() end,                                 desc = "Buffers" },
     { "<leader>/",       function() Snacks.picker.grep() end,                                    desc = "Grep" },
     { "<leader>:",       function() Snacks.picker.command_history() end,                         desc = "Command History" },
@@ -78,8 +82,8 @@ return {
     { "<leader>sC",      function() Snacks.picker.commands() end,                                desc = "Commands" },
     { "<leader>sd",      function() Snacks.picker.diagnostics() end,                             desc = "Diagnostics" },
     { "<leader>sD",      function() Snacks.picker.diagnostics_buffer() end,                      desc = "Buffer Diagnostics" },
-    { "<leader>sf",      function() Snacks.picker.files() end,                                   desc = "Find Files" },
-    { "<leader>sg",      function() Snacks.picker.git_files() end,                               desc = "Find Git Files" },
+    { "<leader>sf",      function() Snacks.picker.files(picker_main_opts()) end,                 desc = "Find Files" },
+    { "<leader>sg",      function() Snacks.picker.git_files(picker_main_opts()) end,             desc = "Find Git Files" },
     { "<leader>sh",      function() Snacks.picker.help() end,                                    desc = "Help Pages" },
     { "<leader>sH",      function() Snacks.picker.highlights() end,                              desc = "Highlights" },
     { "<leader>si",      function() Snacks.picker.icons() end,                                   desc = "Icons" },
@@ -91,7 +95,7 @@ return {
     { "<leader>sp",      function() Snacks.picker.projects() end,                                desc = "Projects" },
     -- { "<leader>sp",      function() Snacks.picker.lazy() end,                                    desc = "Search for Plugin Spec" },
     { "<leader>sq",      function() Snacks.picker.qflist() end,                                  desc = "Quickfix List" },
-    { "<leader>s.",      function() Snacks.picker.recent({ filter = { cwd = true } }) end,       desc = "Recent" },
+    { "<leader>s.",      function() Snacks.picker.recent(vim.tbl_deep_extend("force", { filter = { cwd = true } }, picker_main_opts())) end, desc = "Recent" },
     { "<leader>sr",      function() Snacks.picker.resume() end,                                  desc = "Resume" },
     { "<leader>su",      function() Snacks.picker.undo() end,                                    desc = "Undo History" },
     { "<leader>uC",      function() Snacks.picker.colorschemes() end,                            desc = "Colorschemes" },

@@ -1,6 +1,6 @@
 -- disable netrw
 vim.g.loaded_netrw = 1
-vim.g.loadel_netrwPlugin = 1
+vim.g.loaded_netrwPlugin = 1
 
 
 -- Set <space> as the leader key
@@ -30,6 +30,7 @@ end)
 
 -- Save undo history
 vim.opt.undofile = true
+vim.opt.autoread = true
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.ignorecase = true
@@ -116,6 +117,23 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.highlight.on_yank()
   end,
 })
+
+-- maybe fixing not upd to date git gutter
+--
+-- vim.api.nvim_create_autocmd({ 'FocusGained', 'TermClose' }, {
+--   desc = 'Refresh file and git state after external changes',
+--   group = vim.api.nvim_create_augroup('dotfiles-external-refresh', { clear = true }),
+--   callback = function()
+--     if vim.fn.mode() ~= 'c' then
+--       vim.cmd.checktime()
+--     end
+--
+--     local ok, gitsigns = pcall(require, 'gitsigns')
+--     if ok then
+--       gitsigns.refresh()
+--     end
+--   end,
+-- })
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
