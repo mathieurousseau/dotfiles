@@ -107,7 +107,7 @@ if [ -f "/etc/arch-release" ]; then
 else
   FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
 fi
-autoload -Uz compinit
+autoload -Uz compinit add-zsh-hook
 compinit
 source $ZSH/oh-my-zsh.sh
 
@@ -285,7 +285,7 @@ fi
 
 
 
-if [[ -e /etc/arch-release && $USER = "mathieu" && $HOST = "desktop" ]]; then
+if [[ -e /etc/arch-release && $USER = "mathieu" && $HOST = "arch" ]]; then
   cat << "EOF"
   
  ███▄ ▄███▓ ▄▄▄     ▄▄▄█████▓ ██░ ██  ██▓▓█████  █    ██     ▄▄▄▄   ▄▄▄█████▓ █     █░
@@ -300,7 +300,17 @@ if [[ -e /etc/arch-release && $USER = "mathieu" && $HOST = "desktop" ]]; then
                                                                   ░                   
 EOF
 
+
+wopen() {
+  XDG_RUNTIME_DIR=/run/user/$(id -u) \
+  WAYLAND_DISPLAY=${WAYLAND_DISPLAY:-wayland-0} \
+  DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus \
+  "$@" >/dev/null 2>&1 &
+}
+
 export PATH="/home/mathieu/.local/bin:/home/mathieu/dev/flutter/bin:/home/mathieu/dev/bin:$PATH"
 
-fi
 
+
+
+fi
