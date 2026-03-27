@@ -20,11 +20,9 @@ vim.opt.mouse = 'a'
 -- Don't show the mode, since it's already in the status line
 vim.opt.showmode = false
 
--- Sync clipboard to the local terminal over SSH via OSC 52.
-vim.g.clipboard = vim.ui.clipboard.osc52
-vim.schedule(function()
-  vim.opt.clipboard = 'unnamedplus'
-end)
+-- Force OSC52 clipboard provider.
+vim.g.clipboard = 'osc52'
+vim.opt.clipboard = 'unnamedplus'
 
 -- Save undo history
 vim.opt.undofile = true
