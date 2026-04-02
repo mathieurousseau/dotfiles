@@ -12,6 +12,13 @@ return {
         auto_install = true,
       })
 
+      -- Enable treesitter highlighting for all filetypes with a parser
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function()
+          pcall(vim.treesitter.start)
+        end,
+      })
+
       -- Check for missing parsers on startup and install them
       vim.defer_fn(function()
         local missing = {}
