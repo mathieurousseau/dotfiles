@@ -38,6 +38,22 @@ end
 
 return {
   "folke/sidekick.nvim",
+  init = function()
+    local group = vim.api.nvim_create_augroup("custom_sidekick_shift_enter", { clear = true })
+
+    vim.api.nvim_create_autocmd("FileType", {
+      group = group,
+      pattern = "sidekick_terminal",
+      callback = function(args)
+        vim.keymap.set("t", "<S-CR>", function()
+          local job = vim.b[args.buf].terminal_job_id
+          if job then
+            vim.api.nvim_chan_send(job, "\n")
+          end
+        end, { buffer = args.buf, desc = "Sidekick newline" })
+      end,
+    })
+  end,
   opts = {
     -- add any options here
     cli = {
@@ -53,15 +69,9 @@ return {
       tools = {
         claude = {
           native_scroll = true,
-          keys = {
-            newline = { "<S-CR>", function(t) t:send("\n") end, mode = "t", desc = "Insert newline" },
-          },
         },
         codex = {
           native_scroll = true,
-          keys = {
-            newline = { "<S-CR>", function(t) t:send("\n") end, mode = "t", desc = "Insert newline" },
-          },
         }
 
       },
