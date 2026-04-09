@@ -48,7 +48,7 @@ return {
         vim.keymap.set("t", "<S-CR>", function()
           local job = vim.b[args.buf].terminal_job_id
           if job then
-            vim.api.nvim_chan_send(job, "\n")
+            vim.api.nvim_chan_send(job, "\x1b[13;2u")
           end
         end, { buffer = args.buf, desc = "Sidekick newline" })
       end,
