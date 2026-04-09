@@ -53,9 +53,15 @@ return {
       tools = {
         claude = {
           native_scroll = true,
+          keys = {
+            newline = { "<S-CR>", function(t) t:send("\n") end, mode = "t", desc = "Insert newline" },
+          },
         },
         codex = {
           native_scroll = true,
+          keys = {
+            newline = { "<S-CR>", function(t) t:send("\n") end, mode = "t", desc = "Insert newline" },
+          },
         }
 
       },
