@@ -5,7 +5,7 @@ return {
     lazy = false,
     build = ':TSUpdate',
     config = function()
-      local ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'elixir', 'eex', 'heex', 'java', 'groovy', 'css', 'javascript', 'latex', 'norg', 'scss', 'svelte', 'tsx', 'typst', 'vue', 'regex' }
+      local ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'python', 'query', 'vim', 'vimdoc', 'elixir', 'eex', 'heex', 'java', 'groovy', 'css', 'javascript', 'latex', 'norg', 'scss', 'svelte', 'tsx', 'typst', 'vue', 'regex', 'go', 'gomod', 'gosum', 'gowork' }
 
       require('nvim-treesitter').setup({
         ensure_installed = ensure_installed,

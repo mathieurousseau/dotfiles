@@ -26,6 +26,82 @@ return {
       'hrsh7th/cmp-nvim-lsp',
     },
     config = function()
+      local function is_executable(path)
+        return path and vim.fn.executable(path) == 1
+      end
+
+      local function resolve_python_path(root_dir)
+        local virtual_env = vim.env.VIRTUAL_ENV
+        if virtual_env then
+          local venv_python = virtual_env .. '/bin/python'
+          if is_executable(venv_python) then
+            return venv_python
+          end
+        end
+
+        for _, dir in ipairs({ '.venv', 'venv' }) do
+          local local_python = root_dir .. '/' .. dir .. '/bin/python'
+          if is_executable(local_python) then
+            return local_python
+          end
+        end
+
+        if vim.fn.executable('poetry') == 1 then
+          local result = vim.system({ 'poetry', 'env', 'info', '--path' }, { cwd = root_dir }):wait()
+          if result.code == 0 and result.stdout then
+            local poetry_python = vim.trim(result.stdout) .. '/bin/python'
+            if is_executable(poetry_python) then
+              return poetry_python
+            end
+          end
+        end
+      end
+
+      local function maybe_set_pyright_python_path(client, bufnr)
+        if client.name ~= 'pyright' then
+          return
+        end
+
+        local root_dir = client.config.root_dir
+        if not root_dir then
+          return
+        end
+
+        local python_path = resolve_python_path(root_dir)
+        if not python_path then
+          return
+        end
+
+        local current_path = client.settings
+          and client.settings.python
+          and client.settings.python.pythonPath
+
+        if current_path == python_path then
+          return
+        end
+
+        client.settings = vim.tbl_deep_extend('force', client.settings or {}, {
+          python = {
+            pythonPath = python_path,
+          },
+        })
+        client.config.settings = vim.tbl_deep_extend('force', client.config.settings or {}, {
+          python = {
+            pythonPath = python_path,
+          },
+        })
+        client.notify('workspace/didChangeConfiguration', { settings = client.settings })
+
+        if bufnr and vim.api.nvim_buf_is_valid(bufnr) then
+          vim.schedule(function()
+            if vim.api.nvim_buf_is_valid(bufnr) then
+              vim.diagnostic.reset(vim.lsp.diagnostic.get_namespace(client.id), bufnr)
+              vim.cmd('checktime')
+            end
+          end)
+        end
+      end
+
       -- Brief aside: **What is LSP?**
       --
       -- LSP is an initialism you've probably heard, but might not understand what it is.
@@ -114,6 +190,10 @@ return {
           --
           -- When you move your cursor, the highlights will be cleared (the second autocommand).
           local client = vim.lsp.get_client_by_id(event.data.client_id)
+          if client then
+            maybe_set_pyright_python_path(client, event.buf)
+          end
+
           if client and client.supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight) then
             local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
@@ -167,8 +247,19 @@ return {
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         -- clangd = {},
-        -- gopls = {},
-        -- pyright = {},
+        gopls = {},
+        pyright = {
+          on_init = function(client)
+            maybe_set_pyright_python_path(client)
+          end,
+        },
+        ruff = {
+          capabilities = {
+            general = {
+              positionEncodings = { 'utf-16' },
+            },
+          },
+        },
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -229,13 +320,23 @@ return {
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'google-java-format', -- Used to format Java code
+        'gofumpt',
+        'goimports',
+        'golangci-lint',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
         automatic_installation = true,
+        automatic_enable = {
+          exclude = { 'copilot' },
+        },
         handlers = {
           function(server_name)
+            if not servers[server_name] then
+              return
+            end
+
             local server = servers[server_name] or {}
             -- This handles overriding only values explicitly passed
             -- by the server configuration above. Useful when disabling

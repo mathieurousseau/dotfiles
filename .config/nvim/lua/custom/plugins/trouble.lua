@@ -5,9 +5,12 @@ return {
       modes = {
         my_diagnostics = {
           mode = 'diagnostics',
-          filter = {
-            ['not'] = { severity = vim.diagnostic.severity.INFO },
-          },
+          filter = function(items)
+            return vim.tbl_filter(function(item)
+              return item.severity ~= vim.diagnostic.severity.INFO
+                and item.severity ~= vim.diagnostic.severity.HINT
+            end, items)
+          end,
         },
         info_diagnostics = {
           mode = 'diagnostics',
