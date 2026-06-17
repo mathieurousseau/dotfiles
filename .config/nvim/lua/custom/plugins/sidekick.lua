@@ -45,12 +45,23 @@ return {
       group = group,
       pattern = "sidekick_terminal",
       callback = function(args)
-        vim.keymap.set("t", "<S-CR>", function()
-          local job = vim.b[args.buf].terminal_job_id
-          if job then
-            vim.api.nvim_chan_send(job, "\x1b[13;2u")
+        vim.schedule(function()
+          if not vim.api.nvim_buf_is_valid(args.buf) then
+            return
           end
-        end, { buffer = args.buf, desc = "Sidekick newline" })
+
+          local tool = vim.b[args.buf].sidekick_cli
+          if type(tool) ~= "table" or tool.name ~= "codex" then
+            return
+          end
+
+          vim.keymap.set("t", "<S-CR>", function()
+            local job = vim.b[args.buf].terminal_job_id
+            if job then
+              vim.api.nvim_chan_send(job, "\n")
+            end
+          end, { buffer = args.buf, desc = "Codex newline" })
+        end)
       end,
     })
   end,
