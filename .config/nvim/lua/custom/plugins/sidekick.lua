@@ -51,16 +51,20 @@ return {
           end
 
           local tool = vim.b[args.buf].sidekick_cli
-          if type(tool) ~= "table" or tool.name ~= "codex" then
+          if type(tool) ~= "table" then
             return
           end
+
+          -- Codex wants a literal newline; Claude (and others) expect the
+          -- kitty keyboard protocol encoding for Shift+Enter.
+          local seq = tool.name == "codex" and "\n" or "\x1b[13;2u"
 
           vim.keymap.set("t", "<S-CR>", function()
             local job = vim.b[args.buf].terminal_job_id
             if job then
-              vim.api.nvim_chan_send(job, "\n")
+              vim.api.nvim_chan_send(job, seq)
             end
-          end, { buffer = args.buf, desc = "Codex newline" })
+          end, { buffer = args.buf, desc = "Sidekick newline" })
         end)
       end,
     })
