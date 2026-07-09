@@ -42,6 +42,11 @@ return {
       luasnip.config.setup {}
 
       cmp.setup {
+        -- Don't run completion in prompt buffers (e.g. the snacks picker input),
+        -- where it fights snacks' input rendering and resets the cursor.
+        enabled = function()
+          return vim.bo.buftype ~= 'prompt'
+        end,
         snippet = {
           expand = function(args)
             luasnip.lsp_expand(args.body)

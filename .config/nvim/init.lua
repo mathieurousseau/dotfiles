@@ -151,7 +151,6 @@ require('lazy').setup({
   "tpope/vim-rhubarb",
   "tpope/vim-abolish",
   "HiPhish/rainbow-delimiters.nvim",
-  'RRethy/vim-illuminate',
   "mg979/vim-visual-multi",
   { 'sindrets/diffview.nvim', event = "VeryLazy" },
   { 'Bilal2453/luvit-meta',   event = "VeryLazy" },

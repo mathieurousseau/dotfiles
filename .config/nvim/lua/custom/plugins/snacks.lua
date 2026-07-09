@@ -2,37 +2,6 @@ local function picker_main_opts()
   return vim.bo.filetype == "oil" and { main = { current = true } } or {}
 end
 
-local function grep_opts()
-  if vim.fn.has("nvim-0.12.2") == 0 then
-    return {}
-  end
-
-  return {
-    on_show = function(picker)
-      local function fix_cursor()
-        if not (picker.input and picker.input.win:valid()) then
-          return
-        end
-
-        local line = picker.input:get()
-        local cursor = vim.api.nvim_win_get_cursor(picker.input.win.win)
-
-        if #line > 0 and cursor[2] < #line then
-          vim.api.nvim_win_set_cursor(picker.input.win.win, { 1, #line })
-        end
-      end
-
-      vim.api.nvim_create_autocmd({ "CursorMovedI", "TextChangedI" }, {
-        buffer = picker.input.win.buf,
-        callback = function()
-          vim.schedule(fix_cursor)
-          vim.defer_fn(fix_cursor, 250)
-        end,
-      })
-    end,
-  }
-end
-
 return {
   "folke/snacks.nvim",
   priority = 1000,
@@ -87,7 +56,7 @@ return {
       desc = "Smart Find Files"
     },
     { "<leader>,",  function() Snacks.picker.buffers() end,                                 desc = "Buffers" },
-    { "<leader>/",  function() Snacks.picker.grep(grep_opts()) end,                         desc = "Grep" },
+    { "<leader>/",  function() Snacks.picker.grep() end,                                    desc = "Grep" },
     { "<leader>:",  function() Snacks.picker.command_history() end,                         desc = "Command History" },
     { "<leader>sn", function() Snacks.picker.notifications() end,                           desc = "Notification History" },
     { "<leader>nh", function() Snacks.notifier.show_history() end,                          desc = "Notification History" },
