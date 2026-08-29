@@ -1,39 +1,51 @@
-local sidekick_prev_width
+-- Width stages cycled by <c-g>: default (cli.win.split.width) -> 100% -> 30%.
+local STAGE_DEFAULT, STAGE_FULL, STAGE_SMALL = 1, 2, 3
+local sidekick_stage = STAGE_DEFAULT
 
-local function toggle_sidekick_full_width()
-  local cli = require("sidekick.cli")
-  cli.show({ focus = true })
-
-  if require("sidekick.config").cli.win.layout == "float" then
-    return
-  end
-
-  local states = require("sidekick.cli.state").get({ attached = true, terminal = true })
-  local terminal
-  for _, state in ipairs(states) do
-    if state.terminal and state.terminal:is_open() then
-      terminal = state.terminal
-      break
+local function sidekick_terminal()
+  for _, state in ipairs(require("sidekick.cli.state").get({ attached = true, terminal = true })) do
+    if state.terminal then
+      return state.terminal
     end
   end
+end
 
-  if not terminal or not terminal.win or not vim.api.nvim_win_is_valid(terminal.win) then
-    return
+local function set_sidekick_width(win, stage)
+  if stage == STAGE_FULL then
+    vim.api.nvim_win_call(win, function()
+      vim.cmd("vertical resize 999")
+    end)
+  elseif stage == STAGE_SMALL then
+    vim.api.nvim_win_set_width(win, math.floor(vim.o.columns * 0.3))
+  else
+    -- Same fraction-or-columns rule the plugin applies in `open_win`.
+    local width = require("sidekick.config").cli.win.split.width
+    vim.api.nvim_win_set_width(win, width <= 1 and math.floor(vim.o.columns * width) or width)
   end
+end
 
-  local width = vim.api.nvim_win_get_width(terminal.win)
-  local maxish_width = math.floor(vim.o.columns * 0.75)
+local function cycle_sidekick_width()
+  -- Sample before showing: State.with reopens a hidden pane, so checking
+  -- afterwards can no longer tell whether this press was an open or a resize.
+  local terminal = sidekick_terminal()
+  local was_open = terminal ~= nil and terminal:is_open()
 
-  if sidekick_prev_width and width >= maxish_width then
-    vim.api.nvim_win_set_width(terminal.win, sidekick_prev_width)
-    sidekick_prev_width = nil
-    return
-  end
+  -- State.with defers to after attach/show, unlike cli.show which returns
+  -- before the window exists.
+  require("sidekick.cli.state").with(function(state)
+    local term = state.terminal
+    if not term or not term:is_open() or require("sidekick.config").cli.win.layout == "float" then
+      return
+    end
 
-  sidekick_prev_width = width
-  vim.api.nvim_win_call(terminal.win, function()
-    vim.cmd("vertical resize 999")
-  end)
+    if not was_open then
+      sidekick_stage = STAGE_DEFAULT -- just opened at split.width; nothing to resize
+      return
+    end
+
+    sidekick_stage = sidekick_stage % STAGE_SMALL + 1
+    set_sidekick_width(term.win, sidekick_stage)
+  end, { attach = true, show = true, focus = true })
 end
 
 return {
@@ -72,14 +84,21 @@ return {
   opts = {
     -- add any options here
     cli = {
-      -- win = {
-      --   keys = {
-      --     nav_down = false,
-      --   },
-      -- },
+      win = {
+        -- <= 1 is treated as a fraction of `vim.o.columns`, so 0.5 == 50%.
+        split = { width = 0.5 },
+        -- keys = {
+        --   nav_down = false,
+        -- },
+      },
       mux = {
         backend = "tmux",
         enabled = true,
+      },
+      prompts = {
+        -- Claude Code slash command; sidekick inserts without submitting, so
+        -- this lands in the input for you to send.
+        pr_review = "/responding-to-pr-comments",
       },
       tools = {
         claude = {
@@ -112,8 +131,8 @@ return {
     },
     {
       "<c-g>",
-      toggle_sidekick_full_width,
-      desc = "Sidekick Show Full Width",
+      cycle_sidekick_width,
+      desc = "Sidekick Cycle Width (default/50%/100%)",
       mode = { "n", "t" },
     },
     {

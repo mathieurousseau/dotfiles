@@ -173,6 +173,7 @@ alias clean_staging_repo='git branch  | grep -v staging | xargs git branch -D'
 alias repo_clean="git branch --merged develop | grep -v develop | xargs  git branch --delete"
 
 alias c_nvim="NVIM_APPNAME=c_nvim nvim"
+alias f_nvim="NVIM_APPNAME=f_nvim nvim"
 alias lvim="NVIM_APPNAME=lazyvim nvim"
 
 export PATH=$PATH:~/.bin
@@ -183,18 +184,17 @@ export PATH=$PATH:~/.bin
 
 vip() {
   original_dir=$PWD
-  if [ "$1" != "" ] # or better, if [ -n "$1" ]
-  then
-      cd $1
+  if [ -n "$1" ]; then
+    cd "$1"
   fi
-  print -Pn "\e]0;`basename $PWD`\a"
-  # proj=`basename $PWD`
-  # echo $proj
-  # cd ..
-  # nvim $proj
+  local name="${2:-$(basename "$PWD")}"   # 2nd arg wins, else folder name
+  print -Pn "\e]0;${name}\a"
   nvim .
-  cd $original_dir
+  cd "$original_dir"
 }
+
+vil() { vip . "$1"; }   # vil dev_tools  →  open . as tab "dev_tools"
+
 alias mixw="mix test.watch --seed 0"
 alias gfs="git fetch && git status"
 
@@ -249,7 +249,9 @@ alias k_prod='kubectx scoremedia-production && k9s'
 alias g_check='./gradlew spotlessCheck'
 alias g_apply='./gradlew spotlessApply'
 alias g_run='./gradlew quarkusDev'
-alias g_test='./gradlew test'
+alias g_test='direnv exec / ./gradlew test'
+alias r_test='direnv exec / ./gradlew test  --tests'
+alias rr_test='r_test --rerun-tasks'
 
 alias lstr="ls -ltr"
 
@@ -259,7 +261,7 @@ export JAVA_HOME="/Users/Mathieu.Rousseau/bin/jdk-21.0.6.jdk/Contents/Home"
 export PATH="/Users/Mathieu.Rousseau/bin/jdk-21.0.6.jdk/Contents/Home/bin/:$PATH"
 export PATH="$PATH:/Applications/IntelliJ IDEA CE.app/Contents/MacOS"
 export PATH="$PATH:/opt/homebrew/opt/libpq/bin"
-
+export PATH="/Users/Mathieu.Rousseau/.local/share/bob/nvim-bin:$PATH"
 fi
 
 
