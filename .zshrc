@@ -211,6 +211,11 @@ vip() {
   print -Pn "\e]0;${name}\a"
   nvim .
   cd "$original_dir"
+# ======= mac mini had this
+#   print -Pn "\e]0;`basename $PWD`\a"
+#   "${EDITOR:-nvim}" .
+#   cd $original_dir
+# >>>>>>> Stashed changes
 }
 
 vil() { vip . "$1"; }   # vil dev_tools  →  open . as tab "dev_tools"
@@ -353,5 +358,23 @@ export PATH="/home/mathieu/.local/bin:/home/mathieu/dev/flutter/bin:/home/mathie
 export PATH="/home/mathieu/.local/share/bob/nvim-bin:$PATH"
 
 
+
+fi
+
+if [[ $USER = "mathieu" && ${HOST:l} == mac*mini* ]]; then
+  cat << "EOF"
+███╗   ███╗ █████╗  ██████╗    ███╗   ███╗██╗███╗   ██╗██╗
+████╗ ████║██╔══██╗██╔════╝    ████╗ ████║██║████╗  ██║██║
+██╔████╔██║███████║██║         ██╔████╔██║██║██╔██╗ ██║██║
+██║╚██╔╝██║██╔══██║██║         ██║╚██╔╝██║██║██║╚██╗██║██║
+██║ ╚═╝ ██║██║  ██║╚██████╗    ██║ ╚═╝ ██║██║██║ ╚████║██║
+╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝    ╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝
+EOF
+
+  export EDITOR="/Users/mathieu/.local/share/bob/v0.11.7/bin/nvim"
+  export VISUAL="$EDITOR"
+  export GIT_EDITOR="$EDITOR"
+  alias nvim="$EDITOR"
+  export PATH=$PATH:/Users/mathieu/dev/flutter/bin
 
 fi

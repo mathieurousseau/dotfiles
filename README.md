@@ -21,6 +21,8 @@ openssl@1.1 \
 zsh-autosuggestions \
 zsh-syntax-highlighting \
 fzf \
+fd \
+coreutils
 
 
 brew tap FelixKratz/formulae
@@ -51,6 +53,9 @@ zsh-autosuggestions \
 zsh-syntax-highlighting \
 fzf
  
+# power level 10k
+
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
 
 # theScore specific
 
