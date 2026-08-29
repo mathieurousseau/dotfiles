@@ -152,11 +152,31 @@ VISUAL='nvim'
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 export DIRENV_LOG_FORMAT=""
-if [ -f /etc/arch-release ]; then
-  export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
-else
-  export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
-fi
+# if [ -f /etc/arch-release ]; then
+#   export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+# else
+#   export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+# fi
+
+conditional_asdf() {
+  if [[ -f .tool-versions ]]; then
+    # remove any existing asdf entries then prepend them
+    path=(${path:#$HOME/.asdf/shims})
+    path=(${path:#$HOME/.asdf/bin})
+    path=($HOME/.asdf/shims $HOME/.asdf/bin $path)
+  else
+    # remove asdf entries when not in a project with .tool-versions
+    path=(${path:#$HOME/.asdf/shims})
+    path=(${path:#$HOME/.asdf/bin})
+  fi
+}
+
+# run on directory change and before prompt (covers cd and other cases)
+add-zsh-hook chpwd conditional_asdf
+add-zsh-hook precmd conditional_asdf
+
+conditional_asdf
+
 eval "$(direnv hook zsh)"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
@@ -310,8 +330,27 @@ wopen() {
   "$@" >/dev/null 2>&1 &
 }
 
-export PATH="/home/mathieu/.local/bin:/home/mathieu/dev/flutter/bin:/home/mathieu/dev/bin:$PATH"
+screenshot_select() {
+  emulate -L zsh
 
+  local prefix="sshot_"
+  local ext="png"
+  local max=0
+  local file number
+
+  for file in ${prefix}[0-9][0-9][0-9][0-9].${ext}(N); do
+    number=${file#${prefix}}
+    number=${number%.${ext}}
+    (( 10#$number > max )) && max=$((10#$number))
+  done
+
+  grim -g "$(slurp)" "${prefix}$(printf '%04d' $((max + 1))).${ext}"
+}
+
+alias sshot='screenshot_select'
+
+export PATH="/home/mathieu/.local/bin:/home/mathieu/dev/flutter/bin:/home/mathieu/dev/bin:$PATH"
+export PATH="/home/mathieu/.local/share/bob/nvim-bin:$PATH"
 
 
 
